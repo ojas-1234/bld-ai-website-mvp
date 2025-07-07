@@ -2,11 +2,14 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import InteractiveTimeline from './InteractiveTimeline';
 
 const HeroSection = () => {
   const [prompt, setPrompt] = useState('');
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
+  const [submittedPrompt, setSubmittedPrompt] = useState('');
 
   const dynamicPrompts = [
     'Start a project for me',
@@ -31,8 +34,11 @@ const HeroSection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle prompt submission
-    console.log('Submitted:', prompt);
+    if (prompt.trim()) {
+      setSubmittedPrompt(prompt);
+      setShowTimeline(true);
+      console.log('Submitted:', prompt);
+    }
   };
 
   return (
@@ -82,7 +88,7 @@ const HeroSection = () => {
                   🎤
                 </Button>
                 <Button type="submit" size="sm" className="px-4 bg-primary hover:bg-primary/90">
-                  →
+                  Generate
                 </Button>
               </div>
             </div>
@@ -142,6 +148,11 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+      
+      {/* Interactive Timeline */}
+      {showTimeline && (
+        <InteractiveTimeline prompt={submittedPrompt} />
+      )}
     </section>
   );
 };
