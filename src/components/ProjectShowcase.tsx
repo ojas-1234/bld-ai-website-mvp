@@ -355,11 +355,7 @@ const ProjectShowcase = () => {
                     <p className="text-muted-foreground mb-8 text-lg leading-relaxed flex-1">
                       {project.id === '1' ? (
                         <>
-                          <strong className="text-foreground">The Challenge:</strong> AWS faced critical queuing problems in water management with no software solution for capacity planning or emergency scenarios. Without simulation-based optimization, they relied on worst-case Excel scenarios, leading to oversupply in water storage and redundant infrastructure.
-                          <br /><br />
-                          <strong className="text-foreground">Our Solution:</strong> We designed a comprehensive digital twin with fully customizable water storage configuration accessible through web interface, CLI, and API. Our swarming algorithm optimized truck deployment by maximizing cost functions to minimize disruptions.
-                          <br /><br />
-                          <strong className="text-foreground">The Impact:</strong> Essential for planning future infrastructure expansions across all data centers and manufacturing facilities - delivered ahead of schedule and under budget.
+                          AWS faced critical water management queuing problems with no software solution for capacity planning. We designed a comprehensive digital twin with customizable water storage configuration and swarming algorithms for truck optimization. The solution became essential for planning future infrastructure expansions across all AWS facilities.
                         </>
                       ) : project.description}
                     </p>
