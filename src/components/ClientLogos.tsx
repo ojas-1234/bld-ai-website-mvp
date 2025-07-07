@@ -63,8 +63,8 @@ const ClientLogos = () => {
       height: 'h-12'
     },
     {
-      name: 'Median',
-      logo: '/lovable-uploads/caeb6fb1-66ab-44e1-9d18-1934f3716424.png',
+      name: 'Samsara',
+      logo: '/lovable-uploads/e4f7d2dd-2337-4247-82b1-e256985fe2c9.png',
       width: 'w-28',
       height: 'h-12'
     },
