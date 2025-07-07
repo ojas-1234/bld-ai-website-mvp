@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,9 +21,8 @@ const HeroSection = () => {
           <img 
             src="/lovable-uploads/ddef9eac-5628-4264-93f0-5cabc331b304.png" 
             alt="bld.ai logo" 
-            className="w-12 h-12 mr-3"
+            className="w-16 h-16"
           />
-          <h1 className="text-2xl font-bold text-purple-600">bld.ai</h1>
         </div>
 
         {/* Main Value Proposition */}
