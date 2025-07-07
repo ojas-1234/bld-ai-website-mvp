@@ -464,4 +464,35 @@ const ProjectShowcase = () => {
                               >
                                 <div className="flex items-center justify-between">
                                   <div>
-                                    <div className="text-4xl md:text-5xl font-extrabold text-primary mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-primary to-primary
+                                    <div className="text-4xl md:text-5xl font-extrabold text-primary mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-primary to-primary/80 bg-clip-text">
+                                      {metric.value}
+                                    </div>
+                                    <div className="text-lg md:text-xl font-bold text-foreground mb-1 md:mb-2 uppercase tracking-wider">
+                                      {metric.title}
+                                    </div>
+                                    <div className="text-muted-foreground text-base md:text-lg leading-relaxed">
+                                      {metric.description}
+                                    </div>
+                                  </div>
+                                  <div className="w-12 h-12 md:w-16 md:h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300 flex-shrink-0">
+                                    <div className="w-6 h-6 md:w-8 md:h-8 bg-primary rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+export default ProjectShowcase;
