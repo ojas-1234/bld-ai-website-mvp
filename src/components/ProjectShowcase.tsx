@@ -232,17 +232,74 @@ const ProjectShowcase = () => {
                         
                         <p className="text-muted-foreground mb-8 text-lg leading-relaxed">{project.description}</p>
                         
-                        {/* Solution Animation Placeholder */}
-                        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl p-8 border-2 border-primary/20 h-64 flex flex-col items-center justify-center space-y-4">
-                          <div className="relative">
-                            <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center shadow-xl">
-                              <div className="w-10 h-10 bg-primary rounded-full animate-pulse"></div>
+                        {/* Video/Solution Demo Container */}
+                        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden">
+                          {/* Video Container */}
+                          <div className="relative aspect-video bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center">
+                            {/* Animated Background Pattern */}
+                            <div className="absolute inset-0 opacity-20">
+                              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-primary/20 animate-pulse"></div>
+                              <div className="absolute top-0 left-0 w-full h-full">
+                                {[...Array(12)].map((_, i) => (
+                                  <div
+                                    key={i}
+                                    className="absolute w-2 h-2 bg-primary/30 rounded-full animate-pulse"
+                                    style={{
+                                      left: `${20 + (i % 4) * 20}%`,
+                                      top: `${20 + Math.floor(i / 4) * 20}%`,
+                                      animationDelay: `${i * 0.2}s`,
+                                      animationDuration: '2s'
+                                    }}
+                                  />
+                                ))}
+                              </div>
                             </div>
-                            <div className="absolute inset-0 bg-primary/10 rounded-full animate-ping"></div>
+                            
+                            {/* Play Button & Content */}
+                            <div className="relative z-10 text-center">
+                              <div className="relative mb-4">
+                                <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center shadow-xl backdrop-blur-sm border border-primary/30 hover:bg-primary/30 transition-all duration-300 cursor-pointer group">
+                                  <div className="w-0 h-0 border-l-[12px] border-l-primary border-y-[8px] border-y-transparent ml-1 group-hover:scale-110 transition-transform duration-200"></div>
+                                </div>
+                                <div className="absolute inset-0 bg-primary/10 rounded-full animate-ping opacity-75"></div>
+                              </div>
+                              <h6 className="text-lg font-bold text-primary mb-2">Solution Demo</h6>
+                              <p className="text-sm text-muted-foreground">Click to play interactive walkthrough</p>
+                            </div>
+                            
+                            {/* Video Placeholder Overlay */}
+                            <div className="absolute inset-0 bg-black/5 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                              <div className="bg-black/50 text-white px-4 py-2 rounded-lg text-sm">
+                                Video placeholder - Ready for content
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-center">
-                            <h6 className="text-lg font-bold text-primary mb-2">Interactive Solution Demo</h6>
-                            <p className="text-sm text-muted-foreground">Animated walkthrough coming soon</p>
+                          
+                          {/* Video Controls */}
+                          <div className="p-4 bg-card/80 backdrop-blur-sm border-t border-primary/10">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
+                                <button className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-colors duration-200">
+                                  <div className="w-0 h-0 border-l-[6px] border-l-primary border-y-[4px] border-y-transparent ml-0.5"></div>
+                                </button>
+                                <div className="text-sm text-muted-foreground">0:00 / 2:30</div>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <button className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center hover:bg-muted transition-colors duration-200">
+                                  <div className="w-4 h-4 border border-muted-foreground rounded-sm"></div>
+                                </button>
+                                <button className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center hover:bg-muted transition-colors duration-200">
+                                  <div className="w-3 h-3 bg-muted-foreground rounded-full"></div>
+                                </button>
+                              </div>
+                            </div>
+                            
+                            {/* Progress Bar */}
+                            <div className="mt-3">
+                              <div className="w-full h-1 bg-muted/30 rounded-full overflow-hidden">
+                                <div className="h-full bg-primary w-0 rounded-full animate-pulse" style={{ width: '0%' }}></div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
