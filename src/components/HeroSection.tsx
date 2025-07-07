@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 const HeroSection = () => {
   const [prompt, setPrompt] = useState('');
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const dynamicPrompts = [
     'Start a project for me',
@@ -15,8 +16,13 @@ const HeroSection = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentPlaceholder((prev) => (prev + 1) % dynamicPrompts.length);
-    }, 3000); // Change every 3 seconds
+      setIsTransitioning(true);
+      
+      setTimeout(() => {
+        setCurrentPlaceholder((prev) => (prev + 1) % dynamicPrompts.length);
+        setIsTransitioning(false);
+      }, 200); // Half transition duration
+    }, 4000); // Slightly longer interval for better readability
 
     return () => clearInterval(interval);
   }, []);
@@ -64,7 +70,9 @@ const HeroSection = () => {
                 placeholder={dynamicPrompts[currentPlaceholder]}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="w-full h-14 pl-6 pr-24 text-lg border-2 border-border/50 focus:border-primary rounded-xl bg-card/80 backdrop-blur-sm shadow-lg transition-all duration-300"
+                className={`w-full h-14 pl-6 pr-24 text-lg border-2 border-border/50 focus:border-primary rounded-xl bg-card/80 backdrop-blur-sm shadow-lg transition-all duration-400 placeholder:transition-opacity placeholder:duration-400 ${
+                  isTransitioning ? 'placeholder:opacity-0' : 'placeholder:opacity-100'
+                }`}
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
                 <Button type="button" variant="ghost" size="sm" className="p-2 hover:bg-muted/50">
