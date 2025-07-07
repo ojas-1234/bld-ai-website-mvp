@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,8 +27,13 @@ const HeroSection = () => {
 
         {/* Main Value Proposition */}
         <div className="mb-12">
-          <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight whitespace-nowrap">
-            We build{' '}
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight whitespace-nowrap">
+            <span className="relative inline-block">
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent bg-[length:200%_200%] animate-[gradient-flow_4s_ease-in-out_infinite]">
+                We build
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-cyan-400/20 blur-xl animate-[pulse_3s_ease-in-out_infinite]"></div>
+            </span>{' '}
             <span className="relative inline-block bg-gradient-to-r from-purple-300 via-violet-200 to-purple-300 bg-clip-text text-transparent font-extrabold">
               <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-violet-300 to-purple-400 bg-clip-text text-transparent animate-pulse"></span>
               <span className="relative bg-gradient-to-r from-violet-500 via-purple-200 to-violet-500 bg-clip-text text-transparent">
