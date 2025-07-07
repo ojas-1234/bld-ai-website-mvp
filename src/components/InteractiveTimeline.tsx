@@ -114,41 +114,52 @@ const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
       </div>
 
       {/* Timeline Navigation */}
-      <div className="flex items-center justify-center mb-8 px-4">
-        <div className="flex items-center space-x-2 overflow-x-auto">
+      <div className="relative mb-12">
+        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-muted via-primary/20 to-muted transform -translate-y-1/2" />
+        <div className="flex items-center justify-between px-8 relative">
           {milestones.map((milestone, index) => (
-            <div key={milestone.id} className="flex items-center">
+            <div key={milestone.id} className="flex flex-col items-center group">
               <button
                 onClick={() => scrollToSlide(index)}
                 className={`
-                  flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold transition-all duration-300
+                  relative w-16 h-16 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-500 transform hover:scale-110
                   ${current === index 
-                    ? 'bg-primary text-primary-foreground border-primary shadow-lg scale-110' 
-                    : 'bg-background text-muted-foreground border-muted hover:border-primary hover:text-primary hover:scale-105'
+                    ? 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-xl shadow-primary/25 scale-110 animate-pulse' 
+                    : current > index
+                      ? 'bg-gradient-to-br from-primary/80 to-primary/60 text-primary-foreground shadow-lg shadow-primary/15'
+                      : 'bg-gradient-to-br from-background to-muted border border-border text-muted-foreground hover:border-primary hover:text-primary hover:shadow-lg'
                   }
                 `}
               >
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
                 {milestone.id}
               </button>
-              {index < milestones.length - 1 && (
-                <div className={`w-8 h-0.5 ${current > index ? 'bg-primary' : 'bg-muted'} transition-colors duration-300`} />
-              )}
+              <div className={`mt-3 text-xs font-medium transition-colors duration-300 ${
+                current === index ? 'text-primary' : 'text-muted-foreground'
+              }`}>
+                {milestone.duration}
+              </div>
             </div>
           ))}
-          <div className="flex items-center">
-            <div className={`w-8 h-0.5 ${current >= milestones.length ? 'bg-primary' : 'bg-muted'} transition-colors duration-300`} />
+          <div className="flex flex-col items-center group">
             <button
               onClick={() => scrollToSlide(milestones.length)}
               className={`
-                flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center text-xl transition-all duration-300
+                relative w-16 h-16 rounded-full flex items-center justify-center text-2xl transition-all duration-500 transform hover:scale-110
                 ${current === milestones.length
-                  ? 'bg-primary text-primary-foreground border-primary shadow-lg scale-110' 
-                  : 'bg-background text-muted-foreground border-muted hover:border-primary hover:text-primary hover:scale-105'
+                  ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-xl shadow-green-500/25 scale-110 animate-pulse' 
+                  : 'bg-gradient-to-br from-background to-muted border border-border text-muted-foreground hover:border-green-500 hover:text-green-500 hover:shadow-lg'
                 }
               `}
             >
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
               🚀
             </button>
+            <div className={`mt-3 text-xs font-medium transition-colors duration-300 ${
+              current === milestones.length ? 'text-green-500' : 'text-muted-foreground'
+            }`}>
+              Build
+            </div>
           </div>
         </div>
       </div>
@@ -165,28 +176,51 @@ const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
           {milestones.map((milestone) => (
             <CarouselItem key={milestone.id} className="md:basis-1/2 lg:basis-1/3">
               <Card 
-                className={`h-full cursor-pointer transition-all duration-300 hover:shadow-lg ${
-                  selectedMilestone === milestone.id ? 'ring-2 ring-primary' : ''
-                }`}
+                className={`
+                  h-full cursor-pointer transition-all duration-500 transform hover:scale-[1.02] hover:shadow-2xl
+                  bg-gradient-to-br from-card via-card to-card/95 border-0 shadow-lg
+                  ${selectedMilestone === milestone.id 
+                    ? 'ring-2 ring-primary shadow-primary/20 shadow-2xl scale-[1.02]' 
+                    : 'hover:shadow-primary/10'
+                  }
+                `}
                 onClick={() => setSelectedMilestone(selectedMilestone === milestone.id ? null : milestone.id)}
               >
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline">Milestone {milestone.id}</Badge>
-                    <Badge className="bg-primary/10 text-primary">{milestone.duration}</Badge>
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <Badge 
+                      variant="outline" 
+                      className="bg-primary/5 border-primary/20 text-primary font-medium"
+                    >
+                      Milestone {milestone.id}
+                    </Badge>
+                    <Badge className="bg-gradient-to-r from-primary/10 to-primary/20 text-primary border-0 font-semibold px-3 py-1">
+                      {milestone.duration}
+                    </Badge>
                   </div>
-                  <CardTitle className="text-lg">{milestone.title}</CardTitle>
+                  <CardTitle className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+                    {milestone.title}
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
+                <CardContent className="pt-0">
+                  <div className="space-y-3">
                     {milestone.tasks.slice(0, selectedMilestone === milestone.id ? milestone.tasks.length : 2).map((task, index) => (
-                      <div key={index} className="text-sm text-muted-foreground border-l-2 border-primary/20 pl-3 py-1">
-                        {task}
+                      <div 
+                        key={index} 
+                        className="flex items-start space-x-3 text-sm text-muted-foreground group"
+                      >
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-2 flex-shrink-0 group-hover:bg-primary transition-colors" />
+                        <span className="leading-relaxed group-hover:text-foreground transition-colors">
+                          {task}
+                        </span>
                       </div>
                     ))}
                     {milestone.tasks.length > 2 && selectedMilestone !== milestone.id && (
-                      <div className="text-xs text-primary cursor-pointer hover:underline">
-                        +{milestone.tasks.length - 2} more tasks... (tap to expand)
+                      <div className="flex items-center space-x-2 text-xs text-primary cursor-pointer hover:text-primary/80 transition-colors pt-2 border-t border-border/50">
+                        <span>+{milestone.tasks.length - 2} more tasks</span>
+                        <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center">
+                          <span className="text-[10px]">→</span>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -197,18 +231,26 @@ const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
           
           {/* Build Button Card */}
           <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-            <Card className="h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-              <CardContent className="text-center p-8">
-                <div className="space-y-4">
-                  <div className="text-4xl">🚀</div>
-                  <h3 className="text-xl font-bold">Ready to Build?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Start your project with our expert team
-                  </p>
+            <Card className="h-full flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-green-950/50 dark:via-emerald-950/50 dark:to-teal-950/50 border-green-200/50 dark:border-green-800/50 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-teal-500/5" />
+              <CardContent className="text-center p-8 relative z-10">
+                <div className="space-y-6">
+                  <div className="relative">
+                    <div className="text-5xl animate-bounce">🚀</div>
+                    <div className="absolute -inset-4 bg-gradient-to-r from-green-500/20 to-teal-500/20 rounded-full blur-xl" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
+                      Ready to Build?
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Transform your vision into reality
+                    </p>
+                  </div>
                   <Button 
                     size="lg" 
                     onClick={handleBuildClick}
-                    className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 hover:from-blue-700 hover:via-purple-700 hover:to-cyan-600 text-white"
+                    className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 hover:from-green-700 hover:via-emerald-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-3 text-lg font-semibold"
                   >
                     Build This Project
                   </Button>
