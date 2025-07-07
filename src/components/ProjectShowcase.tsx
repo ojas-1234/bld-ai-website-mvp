@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogOverlay } from '@/components/ui/dialog';
-import awsWaterTechDemo from '@/assets/aws-water-tech-demo.jpg';
+import awsWaterTechDemo from '@/assets/aws-water-demo-frame.jpg';
 
 interface Project {
   id: string;
@@ -28,6 +28,7 @@ const ProjectShowcase = () => {
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [focusedCard, setFocusedCard] = useState<string | null>(null);
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
 
   const projects: Project[] = [
     {
@@ -111,6 +112,14 @@ const ProjectShowcase = () => {
     }
     setFlippedCards(newFlipped);
   }, [flippedCards, expandedCard]);
+
+  const handlePlayVideo = useCallback((projectId: string) => {
+    setPlayingVideo(projectId);
+    // Auto-stop after 8 seconds
+    setTimeout(() => {
+      setPlayingVideo(null);
+    }, 8000);
+  }, []);
 
   const handleKeyPress = useCallback((event: React.KeyboardEvent, projectId: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -450,21 +459,29 @@ const ProjectShowcase = () => {
                          {/* Generic Animated Overlay */}
                          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 animate-pulse"></div>
                          
-                         {/* Play Button */}
-                         <div className="relative z-10 text-center">
-                           <button 
-                             className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-primary/40 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 group mb-4"
-                             aria-label="Play solution demo"
-                           >
-                             <div className="w-0 h-0 border-l-[16px] border-l-white border-y-[12px] border-y-transparent ml-1 group-hover:scale-110 group-active:scale-95 transition-transform duration-200"></div>
-                           </button>
-                           <h6 className="text-lg font-bold text-primary mb-2">
-                             {project.id === '1' ? 'Water Infrastructure Demo' : 'Interactive Walkthrough'}
-                           </h6>
-                           <p className="text-sm text-muted-foreground">
-                             {project.id === '1' ? 'Real-time digital twin simulation' : 'Click to see our solution in action'}
-                           </p>
-                         </div>
+                          {/* Play Button */}
+                          <div className="relative z-10 text-center">
+                            <button 
+                              className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-primary/40 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 group mb-4"
+                              aria-label="Play solution demo"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePlayVideo(project.id);
+                              }}
+                            >
+                              {playingVideo === project.id ? (
+                                <div className="w-4 h-4 bg-white rounded-sm animate-pulse"></div>
+                              ) : (
+                                <div className="w-0 h-0 border-l-[16px] border-l-white border-y-[12px] border-y-transparent ml-1 group-hover:scale-110 group-active:scale-95 transition-transform duration-200"></div>
+                              )}
+                            </button>
+                            <h6 className="text-lg font-bold text-primary mb-2">
+                              {project.id === '1' ? 'Water Infrastructure Demo' : 'Interactive Walkthrough'}
+                            </h6>
+                            <p className="text-sm text-muted-foreground">
+                              {playingVideo === project.id ? 'Playing 8s demo...' : (project.id === '1' ? 'Real-time digital twin simulation' : 'Click to see our solution in action')}
+                            </p>
+                          </div>
                          
                          {/* Generic Animated Elements */}
                          {project.id !== '1' && (
