@@ -1,4 +1,5 @@
 
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,9 +28,9 @@ const HeroSection = () => {
 
         {/* Main Value Proposition */}
         <div className="mb-12">
-          <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
+          <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight whitespace-nowrap">
             We build{' '}
-            <span className="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent whitespace-nowrap">
+            <span className="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
               Enterprise AI Solutions
             </span>
           </h2>
@@ -88,3 +89,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
