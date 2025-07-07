@@ -70,7 +70,7 @@ const ProjectShowcase = () => {
     {
       id: '3',
       client: 'DataRobot',
-      logo: 'https://logo.clearbit.com/datarobot.com',
+      logo: '/lovable-uploads/10beb57c-5983-439f-af92-410c2282c442.png',
       title: 'Automated Model Deployment',
       description: 'End-to-end ML pipeline automation and monitoring',
       videoPreview: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&h=450&fit=crop',
