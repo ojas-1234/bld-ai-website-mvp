@@ -14,6 +14,11 @@ interface Project {
     value: string;
     description: string;
   }[];
+  // Add demo animation data
+  demoAnimation?: {
+    type: 'chart' | 'flow' | 'metrics';
+    data: any;
+  };
 }
 
 const ProjectShowcase = () => {
@@ -21,6 +26,7 @@ const ProjectShowcase = () => {
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [focusedCard, setFocusedCard] = useState<string | null>(null);
+  const [animatingProject, setAnimatingProject] = useState<string | null>(null);
 
   const projects: Project[] = [
     {
@@ -35,7 +41,11 @@ const ProjectShowcase = () => {
         { title: 'Cost Savings', value: '30%', description: 'Reduced monthly cloud spend' },
         { title: 'Efficiency Gain', value: '45%', description: 'Faster resource allocation' },
         { title: 'ROI', value: '350%', description: 'Return on investment in 6 months' }
-      ]
+      ],
+      demoAnimation: {
+        type: 'chart',
+        data: { /* chart data */ }
+      }
     },
     {
       id: '2',
@@ -47,9 +57,13 @@ const ProjectShowcase = () => {
       videoFull: '/api/placeholder/800/450',
       metrics: [
         { title: 'Downtime Reduction', value: '60%', description: 'Less unexpected breakdowns' },
-        { title: 'Maintenance Costs', value: '25%', description: 'Reduction in repair expenses' },
-        { title: 'Fleet Efficiency', value: '40%', description: 'Improved vehicle utilization' }
-      ]
+        { title: 'Maintenance Costs', value: '-25%', description: 'Reduction in repair expenses' },
+        { title: 'Fleet Efficiency', value: '+40%', description: 'Improved vehicle utilization' }
+      ],
+      demoAnimation: {
+        type: 'flow',
+        data: { /* flow data */ }
+      }
     },
     {
       id: '3',
@@ -61,9 +75,13 @@ const ProjectShowcase = () => {
       videoFull: '/api/placeholder/800/450',
       metrics: [
         { title: 'Deployment Speed', value: '75%', description: 'Faster model to production' },
-        { title: 'Accuracy Improvement', value: '20%', description: 'Better model performance' },
+        { title: 'Accuracy Improvement', value: '+20%', description: 'Better model performance' },
         { title: 'Developer Productivity', value: '3x', description: 'More models deployed per sprint' }
-      ]
+      ],
+      demoAnimation: {
+        type: 'metrics',
+        data: { /* metrics data */ }
+      }
     }
   ];
 
@@ -76,14 +94,21 @@ const ProjectShowcase = () => {
   const handleCardClick = useCallback((projectId: string) => {
     if (expandedCard === projectId) {
       setExpandedCard(null);
+      setAnimatingProject(null);
     } else {
       setExpandedCard(projectId);
+      // Start animation after expansion
+      setTimeout(() => {
+        setAnimatingProject(projectId);
+      }, 300);
     }
   }, [expandedCard]);
 
   const handleCardHover = useCallback((projectId: string, isHovering: boolean) => {
+    if (expandedCard) return; // Don't flip if a card is expanded
+    
     const newFlipped = new Set(flippedCards);
-    if (isHovering && !expandedCard) {
+    if (isHovering) {
       newFlipped.add(projectId);
     } else {
       newFlipped.delete(projectId);
@@ -97,6 +122,62 @@ const ProjectShowcase = () => {
       handleCardClick(projectId);
     }
   }, [handleCardClick]);
+
+  // Animation component for project demos
+  const ProjectDemoAnimation = ({ project, isAnimating }: { project: Project; isAnimating: boolean }) => {
+    if (!isAnimating || !project.demoAnimation) return null;
+
+    return (
+      <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
+        {project.demoAnimation.type === 'chart' && (
+          <div className="w-full h-full p-8 animate-fade-in-up">
+            {/* Animated Chart Demo */}
+            <div className="h-full bg-white/90 backdrop-blur rounded-lg shadow-lg p-6">
+              <h5 className="text-lg font-bold mb-4">Cost Optimization Timeline</h5>
+              <div className="relative h-48">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute bottom-0 w-12 bg-primary/80 rounded-t transition-all duration-1000"
+                    style={{
+                      left: `${i * 16}%`,
+                      height: isAnimating ? `${20 + i * 15}%` : '0%',
+                      transitionDelay: `${i * 200}ms`
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {project.demoAnimation.type === 'flow' && (
+          <div className="w-full h-full p-8 animate-fade-in-up">
+            {/* Animated Flow Demo */}
+            <div className="h-full bg-white/90 backdrop-blur rounded-lg shadow-lg p-6">
+              <h5 className="text-lg font-bold mb-4">Predictive Maintenance Flow</h5>
+              <div className="flex items-center justify-around h-32">
+                {['Sensor Data', 'ML Analysis', 'Prediction', 'Alert'].map((step, i) => (
+                  <div key={i} className="text-center">
+                    <div
+                      className="w-16 h-16 bg-primary/80 rounded-full flex items-center justify-center text-white font-bold mb-2 transition-all duration-500"
+                      style={{
+                        transform: isAnimating ? 'scale(1)' : 'scale(0)',
+                        transitionDelay: `${i * 300}ms`
+                      }}
+                    >
+                      {i + 1}
+                    </div>
+                    <p className="text-sm">{step}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // Skeleton Loading Component
   const SkeletonCard = () => (
@@ -177,9 +258,13 @@ const ProjectShowcase = () => {
                     boxShadow: expandedCard === project.id 
                       ? '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 40px hsl(var(--primary) / 0.15)' 
                       : '0 10px 30px -10px rgba(0, 0, 0, 0.1), 0 4px 20px hsl(var(--primary) / 0.05)',
-                    willChange: 'transform, box-shadow'
+                    willChange: 'transform, box-shadow',
+                    perspective: '1000px'
                   }}
-                  onClick={() => handleCardClick(project.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCardClick(project.id);
+                  }}
                   onMouseEnter={() => handleCardHover(project.id, true)}
                   onMouseLeave={() => handleCardHover(project.id, false)}
                   onFocus={() => setFocusedCard(project.id)}
@@ -190,111 +275,114 @@ const ProjectShowcase = () => {
                   aria-expanded={expandedCard === project.id}
                   aria-label={`${project.client} project: ${project.title}. Click to expand details.`}
                 >
-                  {/* Front of card */}
-                  <div
-                    className={`
-                      absolute inset-0 p-6 flex flex-col justify-between 
-                      transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
-                      will-change-transform
-                      ${flippedCards.has(project.id) && !expandedCard 
-                        ? 'transform rotate-y-180 opacity-0 pointer-events-none' 
-                        : 'transform rotate-y-0 opacity-100'
-                      }
-                    `}
-                    style={{ 
-                      transformStyle: 'preserve-3d',
-                      backfaceVisibility: 'hidden'
-                    }}
-                  >
-                    <div>
-                      <div className="flex items-center space-x-4 mb-6">
-                        <div className="relative group-hover:scale-110 transition-transform duration-300">
-                          <img
-                            src={project.logo}
-                            alt={`${project.client} logo`}
-                            className="w-12 h-12 object-contain drop-shadow-lg transition-all duration-300"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                            }}
-                          />
-                          <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors duration-300">
-                            {project.client}
-                          </h3>
-                          <div className="w-8 h-0.5 bg-primary mt-1 group-hover:w-12 transition-all duration-300"></div>
-                        </div>
-                      </div>
-                      <h4 className="text-xl font-bold text-primary mb-3 leading-tight group-hover:text-primary/90 transition-colors duration-300">
-                        {project.title}
-                      </h4>
-                      <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-muted-foreground/90 transition-colors duration-300">
-                        {project.description}
-                      </p>
-                    </div>
-                    
-                    <div className="mt-4">
-                      <div className="w-full h-32 bg-gradient-to-br from-primary/15 to-primary/5 rounded-lg flex items-center justify-center border border-primary/10 group-hover:border-primary/30 transition-all duration-300 overflow-hidden relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                        <div className="text-center relative z-10">
-                          <div className="w-12 h-12 mx-auto mb-2 bg-primary/20 rounded-full flex items-center justify-center shadow-lg group-hover:bg-primary/30 transition-all duration-300">
-                            <div className="w-6 h-6 bg-primary rounded-full animate-pulse group-hover:animate-none group-hover:scale-110 transition-transform duration-300"></div>
+                  {/* Card Flip Container */}
+                  <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+                    {/* Front of card */}
+                    <div
+                      className={`
+                        absolute inset-0 p-6 flex flex-col justify-between 
+                        transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
+                        will-change-transform
+                        ${flippedCards.has(project.id) && !expandedCard 
+                          ? 'opacity-0 pointer-events-none' 
+                          : 'opacity-100'
+                        }
+                      `}
+                      style={{ 
+                        transform: flippedCards.has(project.id) && !expandedCard ? 'rotateY(-180deg)' : 'rotateY(0deg)',
+                        backfaceVisibility: 'hidden'
+                      }}
+                    >
+                      <div>
+                        <div className="flex items-center space-x-4 mb-6">
+                          <div className="relative group-hover:scale-110 transition-transform duration-300">
+                            <img
+                              src={project.logo}
+                              alt={`${project.client} logo`}
+                              className="w-12 h-12 object-contain drop-shadow-lg transition-all duration-300"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                              }}
+                            />
+                            <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
                           </div>
-                          <p className="text-sm text-muted-foreground font-medium">
-                            Hover to see results
-                          </p>
+                          <div>
+                            <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors duration-300">
+                              {project.client}
+                            </h3>
+                            <div className="w-8 h-0.5 bg-primary mt-1 group-hover:w-12 transition-all duration-300"></div>
+                          </div>
+                        </div>
+                        <h4 className="text-xl font-bold text-primary mb-3 leading-tight group-hover:text-primary/90 transition-colors duration-300">
+                          {project.title}
+                        </h4>
+                        <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-muted-foreground/90 transition-colors duration-300">
+                          {project.description}
+                        </p>
+                      </div>
+                      
+                      <div className="mt-4">
+                        <div className="w-full h-32 bg-gradient-to-br from-primary/15 to-primary/5 rounded-lg flex items-center justify-center border border-primary/10 group-hover:border-primary/30 transition-all duration-300 overflow-hidden relative">
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                          <div className="text-center relative z-10">
+                            <div className="w-12 h-12 mx-auto mb-2 bg-primary/20 rounded-full flex items-center justify-center shadow-lg group-hover:bg-primary/30 transition-all duration-300">
+                              <div className="w-6 h-6 bg-primary rounded-full animate-pulse group-hover:animate-none group-hover:scale-110 transition-transform duration-300"></div>
+                            </div>
+                            <p className="text-sm text-muted-foreground font-medium">
+                              {expandedCard ? 'Click to see demo' : 'Hover to see results'}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Back of card (hover state) */}
-                  <div
-                    className={`
-                      absolute inset-0 p-6 
-                      bg-gradient-to-br from-primary/15 to-primary/5 
-                      border-2 border-primary/20 
-                      transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
-                      will-change-transform
-                      ${flippedCards.has(project.id) && !expandedCard 
-                        ? 'transform rotate-y-0 opacity-100' 
-                        : 'transform rotate-y-180 opacity-0 pointer-events-none'
-                      }
-                    `}
-                    style={{ 
-                      transformStyle: 'preserve-3d',
-                      backfaceVisibility: 'hidden'
-                    }}
-                  >
-                    <div className="h-full flex flex-col justify-center items-center text-center space-y-8">
-                      <div className="space-y-6">
-                        {project.metrics.slice(0, 2).map((metric, idx) => (
-                          <div 
-                            key={idx} 
-                            className="transform hover:scale-110 transition-transform duration-300 cursor-pointer"
-                            style={{ animationDelay: `${idx * 100}ms` }}
-                          >
+                    {/* Back of card (hover state) */}
+                    <div
+                      className={`
+                        absolute inset-0 p-6 
+                        bg-gradient-to-br from-primary/15 to-primary/5 
+                        border-2 border-primary/20 
+                        transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
+                        will-change-transform
+                        ${flippedCards.has(project.id) && !expandedCard 
+                          ? 'opacity-100' 
+                          : 'opacity-0 pointer-events-none'
+                        }
+                      `}
+                      style={{ 
+                        transform: flippedCards.has(project.id) && !expandedCard ? 'rotateY(0deg)' : 'rotateY(180deg)',
+                        backfaceVisibility: 'hidden'
+                      }}
+                    >
+                      <div className="h-full flex flex-col justify-center items-center text-center space-y-4 overflow-hidden">
+                        <div className="space-y-4 w-full px-2">
+                          {project.metrics.slice(0, 2).map((metric, idx) => (
                             <div 
-                              className="text-6xl font-extrabold text-primary mb-2 drop-shadow-xl bg-gradient-to-r from-primary to-primary/80 bg-clip-text animate-fade-in-up"
-                              style={{ animationDelay: `${idx * 150}ms` }}
+                              key={idx} 
+                              className="transform hover:scale-105 transition-transform duration-300"
+                              style={{ animationDelay: `${idx * 100}ms` }}
                             >
-                              {metric.value}
+                              <div 
+                                className="text-4xl lg:text-5xl font-extrabold text-primary mb-1 bg-gradient-to-r from-primary to-primary/80 bg-clip-text animate-fade-in-up"
+                                style={{ animationDelay: `${idx * 150}ms` }}
+                              >
+                                {metric.value}
+                              </div>
+                              <div className="text-sm lg:text-base font-bold text-foreground uppercase tracking-wide mb-1">
+                                {metric.title}
+                              </div>
+                              <div className="text-xs lg:text-sm text-muted-foreground max-w-[90%] mx-auto leading-relaxed">
+                                {metric.description}
+                              </div>
                             </div>
-                            <div className="text-lg font-bold text-foreground uppercase tracking-wide mb-1">
-                              {metric.title}
-                            </div>
-                            <div className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-                              {metric.description}
-                            </div>
+                          ))}
+                        </div>
+                        <div className="mt-auto">
+                          <div className="flex items-center justify-center space-x-2 text-primary text-sm font-semibold bg-primary/10 px-6 py-3 rounded-full hover:bg-primary/20 transition-colors duration-300 border border-primary/20">
+                            <span>Click for full case study</span>
+                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
                           </div>
-                        ))}
-                      </div>
-                      <div className="mt-auto">
-                        <div className="flex items-center justify-center space-x-2 text-primary text-sm font-semibold bg-primary/10 px-6 py-3 rounded-full hover:bg-primary/20 transition-colors duration-300 border border-primary/20">
-                          <span>Click for full case study</span>
-                          <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
                         </div>
                       </div>
                     </div>
@@ -307,6 +395,7 @@ const ProjectShowcase = () => {
                         onClick={(e) => {
                           e.stopPropagation();
                           setExpandedCard(null);
+                          setAnimatingProject(null);
                         }}
                         className="absolute top-4 md:top-6 right-4 md:right-6 w-10 h-10 rounded-full bg-muted/80 hover:bg-muted backdrop-blur-sm flex items-center justify-center text-foreground text-xl font-bold transition-all duration-200 hover:scale-110 z-20 focus:ring-2 focus:ring-primary/30 touch-manipulation"
                         aria-label="Close expanded view"
@@ -337,28 +426,12 @@ const ProjectShowcase = () => {
                             {project.description}
                           </p>
                           
-                          {/* Video/Solution Demo Container - Enhanced for mobile */}
-                          <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden touch-manipulation">
+                          {/* Video/Solution Demo Container */}
+                          <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden touch-manipulation relative">
                             {/* Video Container */}
                             <div className="relative aspect-video bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center min-h-[200px]">
-                              {/* ... keep existing video container content ... */}
-                              <div className="absolute inset-0 opacity-20">
-                                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-primary/20 animate-pulse"></div>
-                                <div className="absolute top-0 left-0 w-full h-full">
-                                  {[...Array(12)].map((_, i) => (
-                                    <div
-                                      key={i}
-                                      className="absolute w-2 h-2 bg-primary/30 rounded-full animate-pulse"
-                                      style={{
-                                        left: `${20 + (i % 4) * 20}%`,
-                                        top: `${20 + Math.floor(i / 4) * 20}%`,
-                                        animationDelay: `${i * 0.2}s`,
-                                        animationDuration: '2s'
-                                      }}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
+                              {/* Add animation demo */}
+                              <ProjectDemoAnimation project={project} isAnimating={animatingProject === project.id} />
                               
                               <div className="relative z-10 text-center">
                                 <div className="relative mb-4">
@@ -372,38 +445,6 @@ const ProjectShowcase = () => {
                                 </div>
                                 <h6 className="text-lg font-bold text-primary mb-2">Solution Demo</h6>
                                 <p className="text-sm text-muted-foreground">Tap to play interactive walkthrough</p>
-                              </div>
-                              
-                              <div className="absolute inset-0 bg-black/5 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <div className="bg-black/50 text-white px-4 py-2 rounded-lg text-sm">
-                                  Video placeholder - Ready for content
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {/* Enhanced Video Controls for mobile */}
-                            <div className="p-4 bg-card/80 backdrop-blur-sm border-t border-primary/10">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                  <button className="w-10 h-10 md:w-8 md:h-8 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 active:bg-primary/40 transition-colors duration-200 touch-manipulation">
-                                    <div className="w-0 h-0 border-l-[6px] border-l-primary border-y-[4px] border-y-transparent ml-0.5"></div>
-                                  </button>
-                                  <div className="text-sm text-muted-foreground">0:00 / 2:30</div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <button className="w-10 h-10 md:w-8 md:h-8 bg-muted/50 rounded-full flex items-center justify-center hover:bg-muted active:bg-muted/80 transition-colors duration-200 touch-manipulation">
-                                    <div className="w-4 h-4 border border-muted-foreground rounded-sm"></div>
-                                  </button>
-                                  <button className="w-10 h-10 md:w-8 md:h-8 bg-muted/50 rounded-full flex items-center justify-center hover:bg-muted active:bg-muted/80 transition-colors duration-200 touch-manipulation">
-                                    <div className="w-3 h-3 bg-muted-foreground rounded-full"></div>
-                                  </button>
-                                </div>
-                              </div>
-                              
-                              <div className="mt-3">
-                                <div className="w-full h-2 md:h-1 bg-muted/30 rounded-full overflow-hidden touch-manipulation">
-                                  <div className="h-full bg-primary w-0 rounded-full animate-pulse transition-all duration-300" style={{ width: '0%' }}></div>
-                                </div>
                               </div>
                             </div>
                           </div>
@@ -423,35 +464,4 @@ const ProjectShowcase = () => {
                               >
                                 <div className="flex items-center justify-between">
                                   <div>
-                                    <div className="text-4xl md:text-5xl font-extrabold text-primary mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-primary to-primary/80 bg-clip-text">
-                                      {metric.value}
-                                    </div>
-                                    <div className="text-lg md:text-xl font-bold text-foreground mb-1 md:mb-2 uppercase tracking-wider">
-                                      {metric.title}
-                                    </div>
-                                    <div className="text-muted-foreground text-base md:text-lg leading-relaxed">
-                                      {metric.description}
-                                    </div>
-                                  </div>
-                                  <div className="w-12 h-12 md:w-16 md:h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300 flex-shrink-0">
-                                    <div className="w-6 h-6 md:w-8 md:h-8 bg-primary rounded-full group-hover:scale-110 transition-transform duration-300"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </Card>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  );
-};
-
-export default ProjectShowcase;
+                                    <div className="text-4xl md:text-5xl font-extrabold text-primary mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-primary to-primary
