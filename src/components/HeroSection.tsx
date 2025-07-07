@@ -30,8 +30,12 @@ const HeroSection = () => {
         <div className="mb-12">
           <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight whitespace-nowrap">
             We build{' '}
-            <span className="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              Enterprise AI Solutions
+            <span className="relative inline-block bg-gradient-to-r from-slate-200 via-white to-slate-200 bg-clip-text text-transparent font-extrabold">
+              <span className="absolute inset-0 bg-gradient-to-r from-slate-300 via-slate-100 to-slate-300 bg-clip-text text-transparent animate-pulse"></span>
+              <span className="relative bg-gradient-to-r from-gray-400 via-white to-gray-400 bg-clip-text text-transparent">
+                Enterprise AI Solutions
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shine_2s_ease-in-out_infinite] bg-[length:200%_100%]"></div>
             </span>
           </h2>
           <p className="text-2xl md:text-3xl text-muted-foreground font-medium">Faster, Better, Smarter</p>
