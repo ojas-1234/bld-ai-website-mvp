@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogOverlay } from '@/components/ui/dialog';
-import awsWaterInfrastructureVideo from '@/assets/aws-water-infrastructure-video.jpg';
+import awsWaterTechDemo from '@/assets/aws-water-tech-demo.jpg';
 
 interface Project {
   id: string;
@@ -37,7 +37,7 @@ const ProjectShowcase = () => {
       title: 'Water Infrastructure Digital Twin',
       description: 'Comprehensive digital twin model optimizing water consumption and management at AWS data centers with real-time insights and simulations',
       videoPreview: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=450&fit=crop',
-      videoFull: awsWaterInfrastructureVideo,
+      videoFull: awsWaterTechDemo,
       metrics: [
         { title: 'Truck Reduction', value: '40%', description: 'Fewer trucks needed through optimization' },
         { title: 'Water Efficiency', value: '60%', description: 'Improved consumption planning' },
@@ -355,7 +355,11 @@ const ProjectShowcase = () => {
                     <p className="text-muted-foreground mb-8 text-lg leading-relaxed flex-1">
                       {project.id === '1' ? (
                         <>
-                          AWS faced critical water management queuing problems with no software solution for capacity planning. We designed a comprehensive digital twin with customizable water storage configuration and swarming algorithms for truck optimization. The solution became essential for planning future infrastructure expansions across all AWS facilities.
+                          <strong className="text-foreground">The Challenge:</strong> Critical water management inefficiencies with no digital solution.
+                          <br /><br />
+                          <strong className="text-foreground">Our Innovation:</strong> AI-powered digital twin with real-time optimization algorithms.
+                          <br /><br />
+                          <strong className="text-foreground">The Results:</strong> Watch the video demo to see how we transformed AWS infrastructure →
                         </>
                       ) : project.description}
                     </p>
