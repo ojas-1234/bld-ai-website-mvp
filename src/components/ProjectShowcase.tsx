@@ -124,36 +124,46 @@ const ProjectShowcase = () => {
               >
                 {/* Front of card */}
                 <div
-                  className={`absolute inset-0 p-6 flex flex-col justify-between transition-transform duration-600 ${
-                    flippedCards.has(project.id) && !expandedCard ? 'transform rotateY-180 opacity-0' : ''
+                  className={`absolute inset-0 p-6 flex flex-col justify-between transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] ${
+                    flippedCards.has(project.id) && !expandedCard ? 'transform rotateY-180 opacity-0' : 'transform rotateY-0 opacity-100'
                   }`}
+                  style={{ 
+                    transformStyle: 'preserve-3d',
+                    backfaceVisibility: 'hidden'
+                  }}
                 >
                   <div>
-                    <div className="flex items-center space-x-3 mb-4">
-                      <img
-                        src={project.logo}
-                        alt={project.client}
-                        className="w-8 h-8 object-contain"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
-                      />
-                      <h3 className="font-semibold text-foreground">{project.client}</h3>
+                    <div className="flex items-center space-x-4 mb-6">
+                      <div className="relative">
+                        <img
+                          src={project.logo}
+                          alt={project.client}
+                          className="w-12 h-12 object-contain drop-shadow-sm"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                          }}
+                        />
+                        <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary/10 rounded-lg blur-sm -z-10"></div>
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg text-foreground">{project.client}</h3>
+                        <div className="w-8 h-0.5 bg-primary mt-1"></div>
+                      </div>
                     </div>
-                    <h4 className="text-xl font-bold text-primary mb-3">{project.title}</h4>
-                    <p className="text-muted-foreground">{project.description}</p>
+                    <h4 className="text-xl font-bold text-primary mb-3 leading-tight">{project.title}</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{project.description}</p>
                   </div>
                   
                   <div className="mt-4">
                     <div 
-                      className="w-full h-32 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg flex items-center justify-center"
+                      className="w-full h-32 bg-gradient-to-br from-primary/15 to-primary/5 rounded-lg flex items-center justify-center border border-primary/10 hover:border-primary/20 transition-colors duration-300"
                     >
                       <div className="text-center">
-                        <div className="w-12 h-12 mx-auto mb-2 bg-primary/20 rounded-full flex items-center justify-center">
-                          <div className="w-6 h-6 bg-primary rounded-full"></div>
+                        <div className="w-12 h-12 mx-auto mb-2 bg-primary/20 rounded-full flex items-center justify-center shadow-lg">
+                          <div className="w-6 h-6 bg-primary rounded-full animate-pulse"></div>
                         </div>
-                        <p className="text-sm text-muted-foreground">Video Preview</p>
+                        <p className="text-sm text-muted-foreground font-medium">Hover to see results</p>
                       </div>
                     </div>
                   </div>
@@ -161,78 +171,101 @@ const ProjectShowcase = () => {
 
                 {/* Back of card (hover state) */}
                 <div
-                  className={`absolute inset-0 p-6 bg-gradient-to-br from-primary/10 to-primary/5 transition-transform duration-600 ${
+                  className={`absolute inset-0 p-6 bg-gradient-to-br from-primary/15 to-primary/5 border-2 border-primary/20 transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] ${
                     flippedCards.has(project.id) && !expandedCard ? 'transform rotateY-0 opacity-100' : 'transform rotateY-180 opacity-0'
                   }`}
+                  style={{ 
+                    transformStyle: 'preserve-3d',
+                    backfaceVisibility: 'hidden'
+                  }}
                 >
-                  <div className="h-full flex flex-col justify-center items-center text-center">
-                    <div className="space-y-4">
+                  <div className="h-full flex flex-col justify-center items-center text-center space-y-8">
+                    <div className="space-y-6">
                       {project.metrics.slice(0, 2).map((metric, idx) => (
-                        <div key={idx} className="text-center">
-                          <div className="text-3xl font-bold text-primary">{metric.value}</div>
-                          <div className="text-sm font-semibold text-foreground">{metric.title}</div>
-                          <div className="text-xs text-muted-foreground">{metric.description}</div>
+                        <div key={idx} className="transform hover:scale-105 transition-transform duration-300">
+                          <div className="text-6xl font-extrabold text-primary mb-2 drop-shadow-lg">{metric.value}</div>
+                          <div className="text-lg font-bold text-foreground uppercase tracking-wide">{metric.title}</div>
+                          <div className="text-sm text-muted-foreground max-w-xs">{metric.description}</div>
                         </div>
                       ))}
                     </div>
-                    <div className="mt-6 text-primary text-sm font-medium">
-                      Click to see full details →
+                    <div className="mt-auto">
+                      <div className="flex items-center justify-center space-x-2 text-primary text-sm font-semibold bg-primary/10 px-4 py-2 rounded-full">
+                        <span>Click for full case study</span>
+                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Expanded state */}
                 {expandedCard === project.id && (
-                  <div className="absolute inset-0 p-8 bg-card animate-fade-in-up">
+                  <div className="absolute inset-0 p-8 bg-card animate-fade-in-up shadow-2xl">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setExpandedCard(null);
                       }}
-                      className="absolute top-4 right-4 w-8 h-8 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center text-foreground"
+                      className="absolute top-6 right-6 w-10 h-10 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center text-foreground text-xl font-bold transition-all duration-200 hover:scale-110 z-10"
                     >
                       ×
                     </button>
                     
-                    <div className="grid md:grid-cols-2 gap-8 h-full">
-                      <div>
-                        <div className="flex items-center space-x-3 mb-6">
-                          <img
-                            src={project.logo}
-                            alt={project.client}
-                            className="w-10 h-10 object-contain"
-                          />
+                    <div className="grid md:grid-cols-3 gap-8 h-full">
+                      {/* Left Column - Project Info */}
+                      <div className="md:col-span-1">
+                        <div className="flex items-center space-x-4 mb-8">
+                          <div className="relative">
+                            <img
+                              src={project.logo}
+                              alt={project.client}
+                              className="w-16 h-16 object-contain drop-shadow-lg"
+                            />
+                            <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl blur-md -z-10"></div>
+                          </div>
                           <div>
-                            <h3 className="text-xl font-bold text-foreground">{project.client}</h3>
-                            <h4 className="text-2xl font-bold text-primary">{project.title}</h4>
+                            <h3 className="text-2xl font-bold text-foreground">{project.client}</h3>
+                            <h4 className="text-xl font-bold text-primary">{project.title}</h4>
+                            <div className="w-12 h-1 bg-primary mt-2 rounded-full"></div>
                           </div>
                         </div>
                         
-                        <p className="text-muted-foreground mb-6 text-lg">{project.description}</p>
+                        <p className="text-muted-foreground mb-8 text-lg leading-relaxed">{project.description}</p>
                         
-                        <div 
-                          className="w-full h-48 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg flex items-center justify-center mb-6"
-                        >
-                          <div className="text-center">
-                            <div className="w-16 h-16 mx-auto mb-3 bg-primary/20 rounded-full flex items-center justify-center">
-                              <div className="w-8 h-8 bg-primary rounded-full"></div>
+                        {/* Solution Animation Placeholder */}
+                        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl p-8 border-2 border-primary/20 h-64 flex flex-col items-center justify-center space-y-4">
+                          <div className="relative">
+                            <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center shadow-xl">
+                              <div className="w-10 h-10 bg-primary rounded-full animate-pulse"></div>
                             </div>
-                            <p className="text-muted-foreground">Full Demo Video</p>
+                            <div className="absolute inset-0 bg-primary/10 rounded-full animate-ping"></div>
+                          </div>
+                          <div className="text-center">
+                            <h6 className="text-lg font-bold text-primary mb-2">Interactive Solution Demo</h6>
+                            <p className="text-sm text-muted-foreground">Animated walkthrough coming soon</p>
                           </div>
                         </div>
                       </div>
                       
-                      <div>
-                        <h5 className="text-2xl font-bold text-foreground mb-6">Impact Metrics</h5>
-                        <div className="space-y-6">
+                      {/* Right Columns - Impact Metrics */}
+                      <div className="md:col-span-2">
+                        <h5 className="text-3xl font-bold text-foreground mb-8 text-center">Measurable Impact</h5>
+                        <div className="grid gap-6">
                           {project.metrics.map((metric, idx) => (
                             <div 
                               key={idx} 
-                              className="p-4 rounded-lg bg-gradient-to-r from-accent/20 to-accent/10 border border-accent/30"
+                              className="group p-6 rounded-xl bg-gradient-to-r from-accent/20 to-accent/10 border-2 border-accent/30 hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
                             >
-                              <div className="text-4xl font-bold text-primary mb-2">{metric.value}</div>
-                              <div className="text-lg font-semibold text-foreground mb-1">{metric.title}</div>
-                              <div className="text-muted-foreground">{metric.description}</div>
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <div className="text-5xl font-extrabold text-primary mb-3 group-hover:scale-110 transition-transform duration-300">{metric.value}</div>
+                                  <div className="text-xl font-bold text-foreground mb-2 uppercase tracking-wider">{metric.title}</div>
+                                  <div className="text-muted-foreground text-lg">{metric.description}</div>
+                                </div>
+                                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                                  <div className="w-8 h-8 bg-primary rounded-full"></div>
+                                </div>
+                              </div>
                             </div>
                           ))}
                         </div>
