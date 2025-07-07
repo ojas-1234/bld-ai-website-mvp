@@ -428,46 +428,131 @@ const ProjectShowcase = () => {
                              className="absolute inset-0 w-full h-full object-cover opacity-80"
                            />
                            
-                           {/* Tech Overlay for AWS Project */}
-                           {project.id === '1' && (
-                             <>
-                               {/* Animated Data Flow Lines */}
-                               <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                                 {[...Array(5)].map((_, i) => (
-                                   <div
-                                     key={i}
-                                     className="absolute w-0.5 h-16 bg-gradient-to-b from-blue-400/60 via-cyan-300/40 to-transparent rounded-full"
-                                     style={{
-                                       left: `${15 + i * 18}%`,
-                                       top: `${10 + (i % 2) * 20}%`,
-                                       animation: `slide-in-right ${2 + i * 0.3}s ease-in-out infinite`,
-                                       animationDelay: `${i * 0.4}s`
-                                     }}
-                                   />
-                                 ))}
-                               </div>
-                               
-                               {/* Water Flow Indicators */}
-                               <div className="absolute top-4 left-4 flex items-center space-x-2 bg-blue-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-blue-400/30">
-                                 <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                                 <span className="text-xs text-blue-100 font-semibold">Water Flow: Active</span>
-                               </div>
-                               
-                               {/* Digital Twin Status */}
-                               <div className="absolute top-4 right-4 flex items-center space-x-2 bg-green-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-green-400/30">
-                                 <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
-                                 <span className="text-xs text-green-100 font-semibold">Digital Twin: Online</span>
-                               </div>
-                               
-                               {/* Efficiency Metrics */}
-                               <div className="absolute bottom-4 left-4 bg-purple-500/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-purple-400/30">
-                                 <div className="text-xs text-purple-100 font-semibold">Efficiency: 96.2%</div>
-                                 <div className="w-16 h-1 bg-purple-600/30 rounded-full mt-1">
-                                   <div className="w-[96%] h-full bg-gradient-to-r from-purple-400 to-purple-300 rounded-full animate-pulse"></div>
-                                 </div>
-                               </div>
-                             </>
-                           )}
+                           {/* AWS Water Infrastructure Animated Demo */}
+                            {project.id === '1' && playingVideo === project.id && (
+                              <>
+                                {/* Animated Water Pipes Network */}
+                                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                  {/* Main Water Pipes */}
+                                  <div className="absolute w-1 h-full bg-gradient-to-b from-blue-400/80 via-blue-500/60 to-blue-600/40 left-1/4 animate-pulse"></div>
+                                  <div className="absolute w-full h-1 bg-gradient-to-r from-blue-400/80 via-blue-500/60 to-blue-600/40 top-1/3 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                                  <div className="absolute w-1 h-full bg-gradient-to-b from-blue-400/80 via-blue-500/60 to-blue-600/40 right-1/4 animate-pulse" style={{ animationDelay: '1s' }}></div>
+                                  
+                                  {/* Water Flow Particles */}
+                                  {[...Array(8)].map((_, i) => (
+                                    <div
+                                      key={`particle-${i}`}
+                                      className="absolute w-2 h-2 bg-cyan-300 rounded-full"
+                                      style={{
+                                        left: i % 2 === 0 ? '25%' : '75%',
+                                        animation: `slide-in-right ${1.5 + i * 0.2}s linear infinite`,
+                                        animationDelay: `${i * 0.3}s`,
+                                        top: `${10 + (i * 10)}%`
+                                      }}
+                                    />
+                                  ))}
+                                  
+                                  {/* Data Center Buildings */}
+                                  <div className="absolute bottom-8 left-8 w-16 h-20 bg-gray-700/60 backdrop-blur-sm rounded-t-lg border border-gray-500/40">
+                                    <div className="w-full h-2 bg-green-400/80 animate-pulse mt-2"></div>
+                                    <div className="w-full h-1 bg-blue-400/60 animate-pulse mt-1" style={{ animationDelay: '0.3s' }}></div>
+                                    <div className="text-xs text-white text-center mt-2 font-semibold">DC-1</div>
+                                  </div>
+                                  
+                                  <div className="absolute bottom-8 right-8 w-16 h-20 bg-gray-700/60 backdrop-blur-sm rounded-t-lg border border-gray-500/40">
+                                    <div className="w-full h-2 bg-green-400/80 animate-pulse mt-2" style={{ animationDelay: '0.8s' }}></div>
+                                    <div className="w-full h-1 bg-blue-400/60 animate-pulse mt-1" style={{ animationDelay: '1.1s' }}></div>
+                                    <div className="text-xs text-white text-center mt-2 font-semibold">DC-2</div>
+                                  </div>
+                                  
+                                  {/* Real-time Chart Simulation */}
+                                  <div className="absolute top-8 left-8 w-32 h-20 bg-black/40 backdrop-blur-sm rounded-lg border border-green-400/40 p-2">
+                                    <div className="text-xs text-green-300 font-semibold mb-1">Water Usage</div>
+                                    <div className="flex items-end space-x-1 h-12">
+                                      {[...Array(8)].map((_, i) => (
+                                        <div
+                                          key={`bar-${i}`}
+                                          className="bg-gradient-to-t from-green-400 to-green-300 w-2 rounded-t"
+                                          style={{
+                                            height: `${30 + Math.sin((Date.now() / 1000 + i) * 2) * 20}%`,
+                                            animation: `pulse 2s ease-in-out infinite`,
+                                            animationDelay: `${i * 0.2}s`
+                                          }}
+                                        />
+                                      ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Optimization Algorithms Visualization */}
+                                  <div className="absolute top-8 right-8 w-32 h-20 bg-black/40 backdrop-blur-sm rounded-lg border border-purple-400/40 p-2">
+                                    <div className="text-xs text-purple-300 font-semibold mb-1">AI Optimization</div>
+                                    <div className="space-y-1">
+                                      <div className="flex items-center space-x-2">
+                                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-ping"></div>
+                                        <div className="text-xs text-white">Neural Network</div>
+                                      </div>
+                                      <div className="flex items-center space-x-2">
+                                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                                        <div className="text-xs text-white">Predictive Model</div>
+                                      </div>
+                                      <div className="flex items-center space-x-2">
+                                        <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '1s' }}></div>
+                                        <div className="text-xs text-white">Optimization</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                {/* Dynamic Status Indicators */}
+                                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-4">
+                                  <div className="bg-blue-500/20 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-400/40 flex items-center space-x-2">
+                                    <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
+                                    <span className="text-sm text-blue-100 font-semibold">Water Flow: Optimized</span>
+                                  </div>
+                                  <div className="bg-green-500/20 backdrop-blur-sm px-4 py-2 rounded-full border border-green-400/40 flex items-center space-x-2">
+                                    <div className="w-3 h-3 bg-green-400 rounded-full animate-bounce"></div>
+                                    <span className="text-sm text-green-100 font-semibold">Digital Twin: Active</span>
+                                  </div>
+                                </div>
+                                
+                                {/* Efficiency Progress Animation */}
+                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-sm px-6 py-4 rounded-xl border border-yellow-400/40">
+                                  <div className="text-center">
+                                    <div className="text-2xl text-yellow-300 font-bold mb-2">96.2%</div>
+                                    <div className="text-sm text-white mb-2">System Efficiency</div>
+                                    <div className="w-32 h-2 bg-gray-600 rounded-full overflow-hidden">
+                                      <div 
+                                        className="h-full bg-gradient-to-r from-yellow-400 to-green-400 rounded-full transition-all duration-2000 ease-out"
+                                        style={{ width: '96.2%' }}
+                                      ></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            )}
+                            
+                            {/* Static AWS Preview when not playing */}
+                            {project.id === '1' && playingVideo !== project.id && (
+                              <>
+                                {/* Static Water Flow Indicators */}
+                                <div className="absolute top-4 left-4 flex items-center space-x-2 bg-blue-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-blue-400/30">
+                                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                                  <span className="text-xs text-blue-100 font-semibold">Water Flow: Ready</span>
+                                </div>
+                                
+                                {/* Static Digital Twin Status */}
+                                <div className="absolute top-4 right-4 flex items-center space-x-2 bg-green-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-green-400/30">
+                                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                                  <span className="text-xs text-green-100 font-semibold">Digital Twin: Standby</span>
+                                </div>
+                                
+                                {/* Static Infrastructure Preview */}
+                                <div className="absolute bottom-4 left-4 bg-gray-700/30 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-gray-500/30">
+                                  <div className="text-xs text-gray-200 font-semibold">AWS Infrastructure</div>
+                                  <div className="text-xs text-gray-300">2 Data Centers Connected</div>
+                                </div>
+                              </>
+                            )}
                            
                            {/* Generic Animated Overlay */}
                            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 animate-pulse"></div>
