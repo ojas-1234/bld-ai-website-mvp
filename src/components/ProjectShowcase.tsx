@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogOverlay } from '@/components/ui/dialog';
+import awsWaterInfrastructureVideo from '@/assets/aws-water-infrastructure-video.jpg';
 
 interface Project {
   id: string;
@@ -33,14 +34,14 @@ const ProjectShowcase = () => {
       id: '1',
       client: 'AWS Enterprise',
       logo: 'https://logo.clearbit.com/aws.amazon.com',
-      title: 'AI-Powered Cost Optimization',
-      description: 'Automated cloud resource optimization using machine learning',
+      title: 'Water Infrastructure Digital Twin',
+      description: 'Comprehensive digital twin model optimizing water consumption and management at AWS data centers with real-time insights and simulations',
       videoPreview: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=450&fit=crop',
-      videoFull: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=675&fit=crop',
+      videoFull: awsWaterInfrastructureVideo,
       metrics: [
-        { title: 'Cost Savings', value: '30%', description: 'Reduced monthly cloud spend' },
-        { title: 'Efficiency Gain', value: '45%', description: 'Faster resource allocation' },
-        { title: 'ROI', value: '350%', description: 'Return on investment in 6 months' }
+        { title: 'Truck Reduction', value: '40%', description: 'Fewer trucks needed through optimization' },
+        { title: 'Water Efficiency', value: '60%', description: 'Improved consumption planning' },
+        { title: 'Cost Offset', value: '100%', description: 'Project costs fully recovered' }
       ],
       demoAnimation: {
         type: 'chart',
@@ -352,7 +353,15 @@ const ProjectShowcase = () => {
                     </div>
                     
                     <p className="text-muted-foreground mb-8 text-lg leading-relaxed flex-1">
-                      {project.description}
+                      {project.id === '1' ? (
+                        <>
+                          <strong className="text-foreground">The Challenge:</strong> AWS faced critical queuing problems in water management with no software solution for capacity planning or emergency scenarios. Without simulation-based optimization, they relied on worst-case Excel scenarios, leading to oversupply in water storage and redundant infrastructure.
+                          <br /><br />
+                          <strong className="text-foreground">Our Solution:</strong> We designed a comprehensive digital twin with fully customizable water storage configuration accessible through web interface, CLI, and API. Our swarming algorithm optimized truck deployment by maximizing cost functions to minimize disruptions.
+                          <br /><br />
+                          <strong className="text-foreground">The Impact:</strong> Essential for planning future infrastructure expansions across all data centers and manufacturing facilities - delivered ahead of schedule and under budget.
+                        </>
+                      ) : project.description}
                     </p>
                     
                     {/* Impact Metrics */}
@@ -387,52 +396,103 @@ const ProjectShowcase = () => {
                       Solution Demo
                     </h5>
                     
-                    {/* Video Container */}
-                    <div className="flex-1 bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden relative">
-                      <div className="relative aspect-video h-full bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center">
-                        {/* Background Image */}
-                        <img
-                          src={project.videoFull}
-                          alt={`${project.client} solution demo`}
-                          className="absolute inset-0 w-full h-full object-cover opacity-60"
-                        />
-                        
-                        {/* Animated Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 animate-pulse"></div>
-                        
-                        {/* Play Button */}
-                        <div className="relative z-10 text-center">
-                          <button 
-                            className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-primary/40 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 group mb-4"
-                            aria-label="Play solution demo"
-                          >
-                            <div className="w-0 h-0 border-l-[16px] border-l-white border-y-[12px] border-y-transparent ml-1 group-hover:scale-110 group-active:scale-95 transition-transform duration-200"></div>
-                          </button>
-                          <h6 className="text-lg font-bold text-primary mb-2">Interactive Walkthrough</h6>
-                          <p className="text-sm text-muted-foreground">Click to see our solution in action</p>
-                        </div>
-                        
-                        {/* Animated Elements */}
-                        <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full animate-ping"></div>
-                        <div className="absolute bottom-4 left-4 w-2 h-2 bg-primary/60 rounded-full animate-bounce"></div>
-                        
-                        {/* Data Flow Animation */}
-                        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                          {[...Array(3)].map((_, i) => (
-                            <div
-                              key={i}
-                              className="absolute w-1 h-8 bg-gradient-to-b from-primary/40 to-transparent rounded-full"
-                              style={{
-                                left: `${20 + i * 30}%`,
-                                top: '10%',
-                                animation: `slide-in-right ${3 + i}s ease-in-out infinite`,
-                                animationDelay: `${i * 0.5}s`
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                     {/* Video Container */}
+                     <div className="flex-1 bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden relative">
+                       <div className="relative aspect-video h-full bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center">
+                         {/* Background Image */}
+                         <img
+                           src={project.videoFull}
+                           alt={`${project.client} solution demo`}
+                           className="absolute inset-0 w-full h-full object-cover opacity-80"
+                         />
+                         
+                         {/* Tech Overlay for AWS Project */}
+                         {project.id === '1' && (
+                           <>
+                             {/* Animated Data Flow Lines */}
+                             <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                               {[...Array(5)].map((_, i) => (
+                                 <div
+                                   key={i}
+                                   className="absolute w-0.5 h-16 bg-gradient-to-b from-blue-400/60 via-cyan-300/40 to-transparent rounded-full"
+                                   style={{
+                                     left: `${15 + i * 18}%`,
+                                     top: `${10 + (i % 2) * 20}%`,
+                                     animation: `slide-in-right ${2 + i * 0.3}s ease-in-out infinite`,
+                                     animationDelay: `${i * 0.4}s`
+                                   }}
+                                 />
+                               ))}
+                             </div>
+                             
+                             {/* Water Flow Indicators */}
+                             <div className="absolute top-4 left-4 flex items-center space-x-2 bg-blue-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-blue-400/30">
+                               <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                               <span className="text-xs text-blue-100 font-semibold">Water Flow: Active</span>
+                             </div>
+                             
+                             {/* Digital Twin Status */}
+                             <div className="absolute top-4 right-4 flex items-center space-x-2 bg-green-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-green-400/30">
+                               <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
+                               <span className="text-xs text-green-100 font-semibold">Digital Twin: Online</span>
+                             </div>
+                             
+                             {/* Efficiency Metrics */}
+                             <div className="absolute bottom-4 left-4 bg-purple-500/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-purple-400/30">
+                               <div className="text-xs text-purple-100 font-semibold">Efficiency: 96.2%</div>
+                               <div className="w-16 h-1 bg-purple-600/30 rounded-full mt-1">
+                                 <div className="w-[96%] h-full bg-gradient-to-r from-purple-400 to-purple-300 rounded-full animate-pulse"></div>
+                               </div>
+                             </div>
+                           </>
+                         )}
+                         
+                         {/* Generic Animated Overlay */}
+                         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 animate-pulse"></div>
+                         
+                         {/* Play Button */}
+                         <div className="relative z-10 text-center">
+                           <button 
+                             className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-primary/40 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 group mb-4"
+                             aria-label="Play solution demo"
+                           >
+                             <div className="w-0 h-0 border-l-[16px] border-l-white border-y-[12px] border-y-transparent ml-1 group-hover:scale-110 group-active:scale-95 transition-transform duration-200"></div>
+                           </button>
+                           <h6 className="text-lg font-bold text-primary mb-2">
+                             {project.id === '1' ? 'Water Infrastructure Demo' : 'Interactive Walkthrough'}
+                           </h6>
+                           <p className="text-sm text-muted-foreground">
+                             {project.id === '1' ? 'Real-time digital twin simulation' : 'Click to see our solution in action'}
+                           </p>
+                         </div>
+                         
+                         {/* Generic Animated Elements */}
+                         {project.id !== '1' && (
+                           <>
+                             <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full animate-ping"></div>
+                             <div className="absolute bottom-4 left-4 w-2 h-2 bg-primary/60 rounded-full animate-bounce"></div>
+                           </>
+                         )}
+                         
+                         {/* Generic Data Flow Animation */}
+                         {project.id !== '1' && (
+                           <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                             {[...Array(3)].map((_, i) => (
+                               <div
+                                 key={i}
+                                 className="absolute w-1 h-8 bg-gradient-to-b from-primary/40 to-transparent rounded-full"
+                                 style={{
+                                   left: `${20 + i * 30}%`,
+                                   top: '10%',
+                                   animation: `slide-in-right ${3 + i}s ease-in-out infinite`,
+                                   animationDelay: `${i * 0.5}s`
+                                 }}
+                               />
+                             ))}
+                           </div>
+                         )}
+                       </div>
+                     </div>
                     
                     {/* Demo Description */}
                     <div className="mt-6 p-4 bg-accent/10 rounded-lg border border-accent/20">
