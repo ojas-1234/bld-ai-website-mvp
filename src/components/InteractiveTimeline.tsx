@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -109,7 +110,7 @@ const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
   return (
     <div className="w-full max-w-6xl mx-auto mt-8 p-4">
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold mb-2">Proposed Timeline for: "{prompt}"</h3>
+        <h3 className="text-2xl font-bold mb-2 text-foreground">Proposed Timeline for: "{prompt}"</h3>
         <p className="text-muted-foreground">Swipe through milestones or tap the timeline below</p>
       </div>
 
@@ -194,11 +195,11 @@ const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
                     >
                       Milestone {milestone.id}
                     </Badge>
-                    <Badge className="bg-gradient-to-r from-primary/10 to-primary/20 text-primary border-0 font-semibold px-3 py-1">
+                    <Badge className="bg-primary/10 text-primary border-0 font-semibold px-3 py-1">
                       {milestone.duration}
                     </Badge>
                   </div>
-                  <CardTitle className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+                  <CardTitle className="text-xl font-bold text-foreground">
                     {milestone.title}
                   </CardTitle>
                 </CardHeader>
@@ -240,7 +241,7 @@ const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
                     <div className="absolute -inset-4 bg-gradient-to-r from-green-500/20 to-teal-500/20 rounded-full blur-xl" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
+                    <h3 className="text-2xl font-bold text-green-600">
                       Ready to Build?
                     </h3>
                     <p className="text-muted-foreground">
