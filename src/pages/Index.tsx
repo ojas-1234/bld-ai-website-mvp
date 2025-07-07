@@ -1,6 +1,8 @@
+
 import HeroSection from '@/components/HeroSection';
 import ClientLogos from '@/components/ClientLogos';
 import ProjectShowcase from '@/components/ProjectShowcase';
+import CallToAction from '@/components/CallToAction';
 
 const Index = () => {
   return (
@@ -8,6 +10,7 @@ const Index = () => {
       <HeroSection />
       <ClientLogos />
       <ProjectShowcase />
+      <CallToAction />
     </div>
   );
 };
