@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -219,7 +218,7 @@ const ProjectShowcase = () => {
                     {/* Front of card */}
                     <div
                       className={`
-                        absolute inset-0 p-6 flex flex-col justify-between 
+                        absolute inset-0 p-6 flex flex-col justify-center text-center
                         transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
                         will-change-transform
                         ${flippedCards.has(project.id) 
@@ -232,8 +231,8 @@ const ProjectShowcase = () => {
                         backfaceVisibility: 'hidden'
                       }}
                     >
-                      <div>
-                        <div className="flex items-center space-x-4 mb-6">
+                      <div className="space-y-6">
+                        <div className="flex flex-col items-center space-y-4">
                           <div className="relative group-hover:scale-110 transition-transform duration-300">
                             <img
                               src={project.logo}
@@ -250,28 +249,16 @@ const ProjectShowcase = () => {
                             <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors duration-300">
                               {project.client}
                             </h3>
-                            <div className="w-8 h-0.5 bg-primary mt-1 group-hover:w-12 transition-all duration-300"></div>
+                            <div className="w-8 h-0.5 bg-primary mt-1 mx-auto group-hover:w-12 transition-all duration-300"></div>
                           </div>
                         </div>
-                        <h4 className="text-xl font-bold text-primary mb-3 leading-tight group-hover:text-primary/90 transition-colors duration-300">
-                          {project.title}
-                        </h4>
-                        <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-muted-foreground/90 transition-colors duration-300">
-                          {project.description}
-                        </p>
-                      </div>
-                      
-                      <div className="mt-4">
-                        <div className="w-full h-32 bg-gradient-to-br from-primary/15 to-primary/5 rounded-lg flex items-center justify-center border border-primary/10 group-hover:border-primary/30 transition-all duration-300 overflow-hidden relative">
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                          <div className="text-center relative z-10">
-                            <div className="w-12 h-12 mx-auto mb-2 bg-primary/20 rounded-full flex items-center justify-center shadow-lg group-hover:bg-primary/30 transition-all duration-300">
-                              <div className="w-6 h-6 bg-primary rounded-full animate-pulse group-hover:animate-none group-hover:scale-110 transition-transform duration-300"></div>
-                            </div>
-                            <p className="text-sm text-muted-foreground font-medium">
-                              Hover to see results
-                            </p>
-                          </div>
+                        <div className="space-y-3">
+                          <h4 className="text-xl font-bold text-primary leading-tight group-hover:text-primary/90 transition-colors duration-300">
+                            {project.title}
+                          </h4>
+                          <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-muted-foreground/90 transition-colors duration-300">
+                            {project.description}
+                          </p>
                         </div>
                       </div>
                     </div>
