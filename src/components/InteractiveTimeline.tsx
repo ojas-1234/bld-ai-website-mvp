@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
+import type { CarouselApi } from '@/components/ui/carousel';
 
 interface Milestone {
   id: number;
@@ -17,6 +18,8 @@ interface InteractiveTimelineProps {
 
 const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
   const [selectedMilestone, setSelectedMilestone] = useState<number | null>(null);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
 
   // Demo milestones - in real app this would be AI generated based on prompt
   const milestones: Milestone[] = [
@@ -82,19 +85,82 @@ const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
     }
   ];
 
+  useEffect(() => {
+    if (!api) {
+      return
+    }
+
+    setCurrent(api.selectedScrollSnap())
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap())
+    })
+  }, [api])
+
   const handleBuildClick = () => {
     console.log('Build clicked for project:', prompt);
     // In real app, this would trigger the actual build process
+  };
+
+  const scrollToSlide = (index: number) => {
+    api?.scrollTo(index);
   };
 
   return (
     <div className="w-full max-w-6xl mx-auto mt-8 p-4">
       <div className="text-center mb-6">
         <h3 className="text-2xl font-bold mb-2">Proposed Timeline for: "{prompt}"</h3>
-        <p className="text-muted-foreground">Swipe or use arrows to explore each milestone</p>
+        <p className="text-muted-foreground">Swipe through milestones or tap the timeline below</p>
       </div>
 
-      <Carousel className="w-full">
+      {/* Timeline Navigation */}
+      <div className="flex items-center justify-center mb-8 px-4">
+        <div className="flex items-center space-x-2 overflow-x-auto">
+          {milestones.map((milestone, index) => (
+            <div key={milestone.id} className="flex items-center">
+              <button
+                onClick={() => scrollToSlide(index)}
+                className={`
+                  flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold transition-all duration-300
+                  ${current === index 
+                    ? 'bg-primary text-primary-foreground border-primary shadow-lg scale-110' 
+                    : 'bg-background text-muted-foreground border-muted hover:border-primary hover:text-primary hover:scale-105'
+                  }
+                `}
+              >
+                {milestone.id}
+              </button>
+              {index < milestones.length - 1 && (
+                <div className={`w-8 h-0.5 ${current > index ? 'bg-primary' : 'bg-muted'} transition-colors duration-300`} />
+              )}
+            </div>
+          ))}
+          <div className="flex items-center">
+            <div className={`w-8 h-0.5 ${current >= milestones.length ? 'bg-primary' : 'bg-muted'} transition-colors duration-300`} />
+            <button
+              onClick={() => scrollToSlide(milestones.length)}
+              className={`
+                flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center text-xl transition-all duration-300
+                ${current === milestones.length
+                  ? 'bg-primary text-primary-foreground border-primary shadow-lg scale-110' 
+                  : 'bg-background text-muted-foreground border-muted hover:border-primary hover:text-primary hover:scale-105'
+                }
+              `}
+            >
+              🚀
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <Carousel 
+        className="w-full"
+        setApi={setApi}
+        opts={{
+          align: "start",
+          loop: false,
+        }}
+      >
         <CarouselContent>
           {milestones.map((milestone) => (
             <CarouselItem key={milestone.id} className="md:basis-1/2 lg:basis-1/3">
@@ -151,9 +217,6 @@ const InteractiveTimeline = ({ prompt }: InteractiveTimelineProps) => {
             </Card>
           </CarouselItem>
         </CarouselContent>
-        
-        <CarouselPrevious className="-left-8" />
-        <CarouselNext className="-right-8" />
       </Carousel>
     </div>
   );
