@@ -44,8 +44,8 @@ const HeroSection = () => {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-background via-accent/5 to-accent/10 px-4">
       <div className="max-w-4xl mx-auto text-center">
-        {/* Logo/Brand */}
-        <div className="flex items-center justify-center mb-8">
+        {/* Logo/Brand - moved down with increased top margin */}
+        <div className="flex items-center justify-center mb-8 mt-12">
           <img 
             src="/lovable-uploads/ddef9eac-5628-4264-93f0-5cabc331b304.png" 
             alt="bld.ai logo" 
