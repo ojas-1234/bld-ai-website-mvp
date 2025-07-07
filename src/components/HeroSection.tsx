@@ -1,9 +1,25 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 const HeroSection = () => {
   const [prompt, setPrompt] = useState('');
+  const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+
+  const dynamicPrompts = [
+    'Start a project for me',
+    'Create a proposal for an AI-powered digital twin',
+    'What solutions/teams are available?'
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPlaceholder((prev) => (prev + 1) % dynamicPrompts.length);
+    }, 3000); // Change every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const quickActions = ['Brainstorm 💡', 'Proposal 📋', 'Estimate 💰', 'Hire a team 👥', 'About bld.ai ℹ️', 'QA & Compliance 📋'];
 
@@ -45,10 +61,10 @@ const HeroSection = () => {
             <div className="relative">
               <Input
                 type="text"
-                placeholder="Ask bld.ai"
+                placeholder={dynamicPrompts[currentPlaceholder]}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="w-full h-14 pl-6 pr-24 text-lg border-2 border-border/50 focus:border-primary rounded-xl bg-card/80 backdrop-blur-sm shadow-lg"
+                className="w-full h-14 pl-6 pr-24 text-lg border-2 border-border/50 focus:border-primary rounded-xl bg-card/80 backdrop-blur-sm shadow-lg transition-all duration-300"
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
                 <Button type="button" variant="ghost" size="sm" className="p-2 hover:bg-muted/50">
