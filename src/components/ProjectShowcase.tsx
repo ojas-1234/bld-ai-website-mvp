@@ -1,7 +1,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogOverlay } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import awsWaterTechDemo from '@/assets/aws-water-demo-frame.jpg';
 
 interface Project {
@@ -335,188 +335,202 @@ const ProjectShowcase = () => {
 
       {/* Expanded Modal */}
       <Dialog open={!!expandedCard} onOpenChange={handleCloseExpanded}>
-        <DialogContent className="max-w-6xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-md border border-primary/20">
+        <DialogContent className="max-w-7xl w-[95vw] max-h-[95vh] p-0 overflow-hidden bg-card/95 backdrop-blur-md border border-primary/20">
+          <DialogTitle className="sr-only">
+            {expandedCard && (() => {
+              const project = projects.find(p => p.id === expandedCard);
+              return project ? `${project.client} - ${project.title} Case Study` : 'Project Case Study';
+            })()}
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            Detailed case study showing project metrics, solution demo, and impact results
+          </DialogDescription>
+          
           {expandedCard && (() => {
             const project = projects.find(p => p.id === expandedCard);
             if (!project) return null;
 
             return (
-              <div className="h-full p-6 md:p-8">
-                <div className="grid md:grid-cols-2 gap-8 h-full">
-                  {/* Left Column - Project Info */}
-                  <div className="flex flex-col">
-                    <div className="flex items-center space-x-4 mb-6">
-                      <div className="relative">
-                        <img
-                          src={project.logo}
-                          alt={`${project.client} logo`}
-                          className="w-16 h-16 object-contain drop-shadow-lg"
-                        />
-                        <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl blur-md -z-10"></div>
-                      </div>
-                      <div>
-                        <h3 className="text-2xl font-bold text-foreground">{project.client}</h3>
-                        <h4 className="text-xl font-bold text-primary">{project.title}</h4>
-                        <div className="w-12 h-1 bg-primary mt-2 rounded-full"></div>
-                      </div>
-                    </div>
-                    
-                    <p className="text-muted-foreground mb-8 text-lg leading-relaxed flex-1">
-                      {project.id === '1' ? (
-                        <>
-                          <strong className="text-foreground">The Challenge:</strong> Critical water management inefficiencies with no digital solution.
-                          <br /><br />
-                          <strong className="text-foreground">Our Innovation:</strong> AI-powered digital twin with real-time optimization algorithms.
-                          <br /><br />
-                          <strong className="text-foreground">The Results:</strong> Watch the video demo to see how we transformed AWS infrastructure →
-                        </>
-                      ) : project.description}
-                    </p>
-                    
-                    {/* Impact Metrics */}
-                    <div className="space-y-4">
-                      <h5 className="text-xl font-bold text-foreground mb-4">
-                        Key Results
-                      </h5>
-                      {project.metrics.map((metric, idx) => (
-                        <div 
-                          key={idx} 
-                          className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-accent/20 to-accent/10 border border-accent/30"
-                        >
-                          <div>
-                            <div className="text-2xl font-extrabold text-primary mb-1">
-                              {metric.value}
-                            </div>
-                            <div className="text-sm font-bold text-foreground uppercase tracking-wider">
-                              {metric.title}
-                            </div>
-                          </div>
-                          <div className="text-xs text-muted-foreground text-right max-w-[120px]">
-                            {metric.description}
-                          </div>
+              <div className="h-full max-h-[95vh] overflow-y-auto">
+                <div className="p-6 md:p-8">
+                  <div className="grid lg:grid-cols-2 gap-8">
+                    {/* Left Column - Project Info */}
+                    <div className="flex flex-col space-y-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="relative">
+                          <img
+                            src={project.logo}
+                            alt={`${project.client} logo`}
+                            className="w-16 h-16 object-contain drop-shadow-lg"
+                          />
+                          <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl blur-md -z-10"></div>
                         </div>
-                      ))}
+                        <div>
+                          <h3 className="text-2xl font-bold text-foreground">{project.client}</h3>
+                          <h4 className="text-xl font-bold text-primary">{project.title}</h4>
+                          <div className="w-12 h-1 bg-primary mt-2 rounded-full"></div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <p className="text-muted-foreground text-lg leading-relaxed">
+                          {project.id === '1' ? (
+                            <>
+                              <strong className="text-foreground">The Challenge:</strong> Critical water management inefficiencies with no digital solution.
+                              <br /><br />
+                              <strong className="text-foreground">Our Innovation:</strong> AI-powered digital twin with real-time optimization algorithms.
+                              <br /><br />
+                              <strong className="text-foreground">The Results:</strong> Watch the video demo to see how we transformed AWS infrastructure →
+                            </>
+                          ) : project.description}
+                        </p>
+                      </div>
+                      
+                      {/* Impact Metrics */}
+                      <div className="space-y-4">
+                        <h5 className="text-xl font-bold text-foreground">
+                          Key Results
+                        </h5>
+                        {project.metrics.map((metric, idx) => (
+                          <div 
+                            key={idx} 
+                            className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-accent/20 to-accent/10 border border-accent/30"
+                          >
+                            <div>
+                              <div className="text-2xl font-extrabold text-primary mb-1">
+                                {metric.value}
+                              </div>
+                              <div className="text-sm font-bold text-foreground uppercase tracking-wider">
+                                {metric.title}
+                              </div>
+                            </div>
+                            <div className="text-xs text-muted-foreground text-right max-w-[120px]">
+                              {metric.description}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  
-                  {/* Right Column - Video Demo */}
-                  <div className="flex flex-col">
-                    <h5 className="text-2xl font-bold text-foreground mb-6 text-center">
-                      Solution Demo
-                    </h5>
                     
-                     {/* Video Container */}
-                     <div className="flex-1 bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden relative">
-                       <div className="relative aspect-video h-full bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center">
-                         {/* Background Image */}
-                         <img
-                           src={project.videoFull}
-                           alt={`${project.client} solution demo`}
-                           className="absolute inset-0 w-full h-full object-cover opacity-80"
-                         />
-                         
-                         {/* Tech Overlay for AWS Project */}
-                         {project.id === '1' && (
-                           <>
-                             {/* Animated Data Flow Lines */}
+                    {/* Right Column - Video Demo */}
+                    <div className="flex flex-col space-y-6">
+                      <h5 className="text-2xl font-bold text-foreground text-center">
+                        Solution Demo
+                      </h5>
+                      
+                       {/* Video Container - Fixed aspect ratio and better responsiveness */}
+                       <div className="w-full bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden">
+                         <div className="relative w-full aspect-video bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center">
+                           {/* Background Image */}
+                           <img
+                             src={project.videoFull}
+                             alt={`${project.client} solution demo`}
+                             className="absolute inset-0 w-full h-full object-cover opacity-80"
+                           />
+                           
+                           {/* Tech Overlay for AWS Project */}
+                           {project.id === '1' && (
+                             <>
+                               {/* Animated Data Flow Lines */}
+                               <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                 {[...Array(5)].map((_, i) => (
+                                   <div
+                                     key={i}
+                                     className="absolute w-0.5 h-16 bg-gradient-to-b from-blue-400/60 via-cyan-300/40 to-transparent rounded-full"
+                                     style={{
+                                       left: `${15 + i * 18}%`,
+                                       top: `${10 + (i % 2) * 20}%`,
+                                       animation: `slide-in-right ${2 + i * 0.3}s ease-in-out infinite`,
+                                       animationDelay: `${i * 0.4}s`
+                                     }}
+                                   />
+                                 ))}
+                               </div>
+                               
+                               {/* Water Flow Indicators */}
+                               <div className="absolute top-4 left-4 flex items-center space-x-2 bg-blue-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-blue-400/30">
+                                 <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                                 <span className="text-xs text-blue-100 font-semibold">Water Flow: Active</span>
+                               </div>
+                               
+                               {/* Digital Twin Status */}
+                               <div className="absolute top-4 right-4 flex items-center space-x-2 bg-green-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-green-400/30">
+                                 <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
+                                 <span className="text-xs text-green-100 font-semibold">Digital Twin: Online</span>
+                               </div>
+                               
+                               {/* Efficiency Metrics */}
+                               <div className="absolute bottom-4 left-4 bg-purple-500/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-purple-400/30">
+                                 <div className="text-xs text-purple-100 font-semibold">Efficiency: 96.2%</div>
+                                 <div className="w-16 h-1 bg-purple-600/30 rounded-full mt-1">
+                                   <div className="w-[96%] h-full bg-gradient-to-r from-purple-400 to-purple-300 rounded-full animate-pulse"></div>
+                                 </div>
+                               </div>
+                             </>
+                           )}
+                           
+                           {/* Generic Animated Overlay */}
+                           <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 animate-pulse"></div>
+                           
+                            {/* Play Button */}
+                            <div className="relative z-10 text-center">
+                              <button 
+                                className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-primary/40 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 group mb-4"
+                                aria-label="Play solution demo"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handlePlayVideo(project.id);
+                                }}
+                              >
+                                {playingVideo === project.id ? (
+                                  <div className="w-4 h-4 bg-white rounded-sm animate-pulse"></div>
+                                ) : (
+                                  <div className="w-0 h-0 border-l-[16px] border-l-white border-y-[12px] border-y-transparent ml-1 group-hover:scale-110 group-active:scale-95 transition-transform duration-200"></div>
+                                )}
+                              </button>
+                              <h6 className="text-lg font-bold text-primary mb-2">
+                                {project.id === '1' ? 'Water Infrastructure Demo' : 'Interactive Walkthrough'}
+                              </h6>
+                              <p className="text-sm text-muted-foreground">
+                                {playingVideo === project.id ? 'Playing 8s demo...' : (project.id === '1' ? 'Real-time digital twin simulation' : 'Click to see our solution in action')}
+                              </p>
+                            </div>
+                           
+                           {/* Generic Animated Elements for other projects */}
+                           {project.id !== '1' && (
+                             <>
+                               <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full animate-ping"></div>
+                               <div className="absolute bottom-4 left-4 w-2 h-2 bg-primary/60 rounded-full animate-bounce"></div>
+                             </>
+                           )}
+                           
+                           {/* Generic Data Flow Animation for other projects */}
+                           {project.id !== '1' && (
                              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                               {[...Array(5)].map((_, i) => (
+                               {[...Array(3)].map((_, i) => (
                                  <div
                                    key={i}
-                                   className="absolute w-0.5 h-16 bg-gradient-to-b from-blue-400/60 via-cyan-300/40 to-transparent rounded-full"
+                                   className="absolute w-1 h-8 bg-gradient-to-b from-primary/40 to-transparent rounded-full"
                                    style={{
-                                     left: `${15 + i * 18}%`,
-                                     top: `${10 + (i % 2) * 20}%`,
-                                     animation: `slide-in-right ${2 + i * 0.3}s ease-in-out infinite`,
-                                     animationDelay: `${i * 0.4}s`
+                                     left: `${20 + i * 30}%`,
+                                     top: '10%',
+                                     animation: `slide-in-right ${3 + i}s ease-in-out infinite`,
+                                     animationDelay: `${i * 0.5}s`
                                    }}
                                  />
                                ))}
                              </div>
-                             
-                             {/* Water Flow Indicators */}
-                             <div className="absolute top-4 left-4 flex items-center space-x-2 bg-blue-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-blue-400/30">
-                               <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                               <span className="text-xs text-blue-100 font-semibold">Water Flow: Active</span>
-                             </div>
-                             
-                             {/* Digital Twin Status */}
-                             <div className="absolute top-4 right-4 flex items-center space-x-2 bg-green-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-green-400/30">
-                               <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
-                               <span className="text-xs text-green-100 font-semibold">Digital Twin: Online</span>
-                             </div>
-                             
-                             {/* Efficiency Metrics */}
-                             <div className="absolute bottom-4 left-4 bg-purple-500/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-purple-400/30">
-                               <div className="text-xs text-purple-100 font-semibold">Efficiency: 96.2%</div>
-                               <div className="w-16 h-1 bg-purple-600/30 rounded-full mt-1">
-                                 <div className="w-[96%] h-full bg-gradient-to-r from-purple-400 to-purple-300 rounded-full animate-pulse"></div>
-                               </div>
-                             </div>
-                           </>
-                         )}
-                         
-                         {/* Generic Animated Overlay */}
-                         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 animate-pulse"></div>
-                         
-                          {/* Play Button */}
-                          <div className="relative z-10 text-center">
-                            <button 
-                              className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-primary/40 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 group mb-4"
-                              aria-label="Play solution demo"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handlePlayVideo(project.id);
-                              }}
-                            >
-                              {playingVideo === project.id ? (
-                                <div className="w-4 h-4 bg-white rounded-sm animate-pulse"></div>
-                              ) : (
-                                <div className="w-0 h-0 border-l-[16px] border-l-white border-y-[12px] border-y-transparent ml-1 group-hover:scale-110 group-active:scale-95 transition-transform duration-200"></div>
-                              )}
-                            </button>
-                            <h6 className="text-lg font-bold text-primary mb-2">
-                              {project.id === '1' ? 'Water Infrastructure Demo' : 'Interactive Walkthrough'}
-                            </h6>
-                            <p className="text-sm text-muted-foreground">
-                              {playingVideo === project.id ? 'Playing 8s demo...' : (project.id === '1' ? 'Real-time digital twin simulation' : 'Click to see our solution in action')}
-                            </p>
-                          </div>
-                         
-                         {/* Generic Animated Elements */}
-                         {project.id !== '1' && (
-                           <>
-                             <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full animate-ping"></div>
-                             <div className="absolute bottom-4 left-4 w-2 h-2 bg-primary/60 rounded-full animate-bounce"></div>
-                           </>
-                         )}
-                         
-                         {/* Generic Data Flow Animation */}
-                         {project.id !== '1' && (
-                           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                             {[...Array(3)].map((_, i) => (
-                               <div
-                                 key={i}
-                                 className="absolute w-1 h-8 bg-gradient-to-b from-primary/40 to-transparent rounded-full"
-                                 style={{
-                                   left: `${20 + i * 30}%`,
-                                   top: '10%',
-                                   animation: `slide-in-right ${3 + i}s ease-in-out infinite`,
-                                   animationDelay: `${i * 0.5}s`
-                                 }}
-                               />
-                             ))}
-                           </div>
-                         )}
+                           )}
+                         </div>
                        </div>
-                     </div>
-                    
-                    {/* Demo Description */}
-                    <div className="mt-6 p-4 bg-accent/10 rounded-lg border border-accent/20">
-                      <p className="text-sm text-muted-foreground text-center">
-                        This interactive demo showcases how our {project.title.toLowerCase()} solution 
-                        delivered measurable results for {project.client}.
-                      </p>
+                      
+                      {/* Demo Description */}
+                      <div className="p-4 bg-accent/10 rounded-lg border border-accent/20">
+                        <p className="text-sm text-muted-foreground text-center">
+                          This interactive demo showcases how our {project.title.toLowerCase()} solution 
+                          delivered measurable results for {project.client}.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
