@@ -102,6 +102,49 @@ const HeroSection = () => {
           ))}
         </div>
 
+        {/* New Captivating Timeline Text */}
+        <div className="mb-16">
+          <div className="relative p-8 rounded-2xl bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 border border-primary/10 backdrop-blur-sm">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative z-10">
+              <h3 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent bg-[length:300%_300%] animate-[gradient-flow_6s_ease-in-out_infinite]">
+                    Assemble a Team in 24 hours
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-cyan-400/30 blur-lg animate-[pulse_4s_ease-in-out_infinite]"></div>
+                </span>
+              </h3>
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-12 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
+                <div className="mx-4 text-2xl animate-bounce">→</div>
+                <div className="w-12 h-0.5 bg-gradient-to-r from-purple-500 to-cyan-500 animate-pulse"></div>
+              </div>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-purple-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent bg-[length:300%_300%] animate-[gradient-flow_6s_ease-in-out_infinite_1s]">
+                    Proposal in 24 hours
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-cyan-400/30 to-blue-400/30 blur-lg animate-[pulse_4s_ease-in-out_infinite_1s]"></div>
+                </span>
+              </h3>
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-12 h-0.5 bg-gradient-to-r from-purple-500 to-cyan-500 animate-pulse"></div>
+                <div className="mx-4 text-2xl animate-bounce">→</div>
+                <div className="w-12 h-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 animate-pulse"></div>
+              </div>
+              <h3 className="text-3xl md:text-4xl font-bold">
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent bg-[length:300%_300%] animate-[gradient-flow_6s_ease-in-out_infinite_2s]">
+                    MVP in 2 weeks
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/30 via-blue-400/30 to-purple-400/30 blur-lg animate-[pulse_4s_ease-in-out_infinite_2s]"></div>
+                </span>
+              </h3>
+            </div>
+          </div>
+        </div>
+
         {/* Scroll indicator */}
         <div className="flex flex-col items-center text-primary">
           <div className="text-sm mb-2">scroll to view more</div>
