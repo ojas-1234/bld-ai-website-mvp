@@ -36,10 +36,8 @@ const HeroSection = () => {
           <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
             We build{' '}
             <span className="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              Agentic AI Solutions
+              Enterprise-Level AI Solutions
             </span>
-            <br />
-            for Enterprises
           </h2>
           <p className="text-2xl md:text-3xl text-muted-foreground font-medium">
             Faster, Better, Cheaper.
