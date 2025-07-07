@@ -109,9 +109,9 @@ const HeroSection = () => {
         </div>
 
         {/* Updated Timeline Text */}
-        <div className="mb-16">
-          <div className="text-center space-y-8">
-            <h3 className="text-3xl md:text-4xl font-bold">
+        <div className="mb-12">
+          <div className="text-center space-y-6">
+            <h3 className="text-2xl md:text-3xl font-bold">
               <span className="relative inline-block">
                 <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent bg-[length:300%_300%] animate-[gradient-flow_6s_ease-in-out_infinite]">
                   Assemble a Team in 24 hours
@@ -124,7 +124,7 @@ const HeroSection = () => {
               <div className="text-4xl animate-bounce">↓</div>
             </div>
             
-            <h3 className="text-3xl md:text-4xl font-bold">
+            <h3 className="text-2xl md:text-3xl font-bold">
               <span className="relative inline-block">
                 <span className="bg-gradient-to-r from-purple-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent bg-[length:300%_300%] animate-[gradient-flow_6s_ease-in-out_infinite_1s]">
                   Proposal in 24 hours
@@ -134,10 +134,10 @@ const HeroSection = () => {
             </h3>
             
             <div className="flex justify-center">
-              <div className="text-4xl animate-bounce">↓</div>
+              <div className="text-3xl animate-bounce">↓</div>
             </div>
             
-            <h3 className="text-3xl md:text-4xl font-bold">
+            <h3 className="text-2xl md:text-3xl font-bold">
               <span className="relative inline-block">
                 <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent bg-[length:300%_300%] animate-[gradient-flow_6s_ease-in-out_infinite_2s]">
                   MVP in 2 weeks
