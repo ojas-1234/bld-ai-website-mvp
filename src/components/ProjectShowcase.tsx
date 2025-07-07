@@ -1,5 +1,7 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogOverlay } from '@/components/ui/dialog';
 
 interface Project {
   id: string;
@@ -14,7 +16,6 @@ interface Project {
     value: string;
     description: string;
   }[];
-  // Add demo animation data
   demoAnimation?: {
     type: 'chart' | 'flow' | 'metrics';
     data: any;
@@ -26,7 +27,6 @@ const ProjectShowcase = () => {
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [focusedCard, setFocusedCard] = useState<string | null>(null);
-  const [animatingProject, setAnimatingProject] = useState<string | null>(null);
 
   const projects: Project[] = [
     {
@@ -35,8 +35,8 @@ const ProjectShowcase = () => {
       logo: 'https://logo.clearbit.com/aws.amazon.com',
       title: 'AI-Powered Cost Optimization',
       description: 'Automated cloud resource optimization using machine learning',
-      videoPreview: '/api/placeholder/400/225',
-      videoFull: '/api/placeholder/800/450',
+      videoPreview: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=450&fit=crop',
+      videoFull: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=675&fit=crop',
       metrics: [
         { title: 'Cost Savings', value: '30%', description: 'Reduced monthly cloud spend' },
         { title: 'Efficiency Gain', value: '45%', description: 'Faster resource allocation' },
@@ -44,7 +44,7 @@ const ProjectShowcase = () => {
       ],
       demoAnimation: {
         type: 'chart',
-        data: { /* chart data */ }
+        data: {}
       }
     },
     {
@@ -53,8 +53,8 @@ const ProjectShowcase = () => {
       logo: 'https://logo.clearbit.com/samsara.com',
       title: 'Predictive Fleet Maintenance',
       description: 'ML-driven predictive maintenance for commercial vehicles',
-      videoPreview: '/api/placeholder/400/225',
-      videoFull: '/api/placeholder/800/450',
+      videoPreview: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=450&fit=crop',
+      videoFull: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&h=675&fit=crop',
       metrics: [
         { title: 'Downtime Reduction', value: '60%', description: 'Less unexpected breakdowns' },
         { title: 'Maintenance Costs', value: '-25%', description: 'Reduction in repair expenses' },
@@ -62,7 +62,7 @@ const ProjectShowcase = () => {
       ],
       demoAnimation: {
         type: 'flow',
-        data: { /* flow data */ }
+        data: {}
       }
     },
     {
@@ -71,8 +71,8 @@ const ProjectShowcase = () => {
       logo: 'https://logo.clearbit.com/datarobot.com',
       title: 'Automated Model Deployment',
       description: 'End-to-end ML pipeline automation and monitoring',
-      videoPreview: '/api/placeholder/400/225',
-      videoFull: '/api/placeholder/800/450',
+      videoPreview: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&h=450&fit=crop',
+      videoFull: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1200&h=675&fit=crop',
       metrics: [
         { title: 'Deployment Speed', value: '75%', description: 'Faster model to production' },
         { title: 'Accuracy Improvement', value: '+20%', description: 'Better model performance' },
@@ -80,7 +80,7 @@ const ProjectShowcase = () => {
       ],
       demoAnimation: {
         type: 'metrics',
-        data: { /* metrics data */ }
+        data: {}
       }
     }
   ];
@@ -92,17 +92,12 @@ const ProjectShowcase = () => {
   }, []);
 
   const handleCardClick = useCallback((projectId: string) => {
-    if (expandedCard === projectId) {
-      setExpandedCard(null);
-      setAnimatingProject(null);
-    } else {
-      setExpandedCard(projectId);
-      // Start animation after expansion
-      setTimeout(() => {
-        setAnimatingProject(projectId);
-      }, 300);
-    }
-  }, [expandedCard]);
+    setExpandedCard(projectId);
+  }, []);
+
+  const handleCloseExpanded = useCallback(() => {
+    setExpandedCard(null);
+  }, []);
 
   const handleCardHover = useCallback((projectId: string, isHovering: boolean) => {
     if (expandedCard) return; // Don't flip if a card is expanded
@@ -122,62 +117,6 @@ const ProjectShowcase = () => {
       handleCardClick(projectId);
     }
   }, [handleCardClick]);
-
-  // Animation component for project demos
-  const ProjectDemoAnimation = ({ project, isAnimating }: { project: Project; isAnimating: boolean }) => {
-    if (!isAnimating || !project.demoAnimation) return null;
-
-    return (
-      <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
-        {project.demoAnimation.type === 'chart' && (
-          <div className="w-full h-full p-8 animate-fade-in-up">
-            {/* Animated Chart Demo */}
-            <div className="h-full bg-white/90 backdrop-blur rounded-lg shadow-lg p-6">
-              <h5 className="text-lg font-bold mb-4">Cost Optimization Timeline</h5>
-              <div className="relative h-48">
-                {[...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute bottom-0 w-12 bg-primary/80 rounded-t transition-all duration-1000"
-                    style={{
-                      left: `${i * 16}%`,
-                      height: isAnimating ? `${20 + i * 15}%` : '0%',
-                      transitionDelay: `${i * 200}ms`
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {project.demoAnimation.type === 'flow' && (
-          <div className="w-full h-full p-8 animate-fade-in-up">
-            {/* Animated Flow Demo */}
-            <div className="h-full bg-white/90 backdrop-blur rounded-lg shadow-lg p-6">
-              <h5 className="text-lg font-bold mb-4">Predictive Maintenance Flow</h5>
-              <div className="flex items-center justify-around h-32">
-                {['Sensor Data', 'ML Analysis', 'Prediction', 'Alert'].map((step, i) => (
-                  <div key={i} className="text-center">
-                    <div
-                      className="w-16 h-16 bg-primary/80 rounded-full flex items-center justify-center text-white font-bold mb-2 transition-all duration-500"
-                      style={{
-                        transform: isAnimating ? 'scale(1)' : 'scale(0)',
-                        transitionDelay: `${i * 300}ms`
-                      }}
-                    >
-                      {i + 1}
-                    </div>
-                    <p className="text-sm">{step}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
 
   // Skeleton Loading Component
   const SkeletonCard = () => (
@@ -230,14 +169,9 @@ const ProjectShowcase = () => {
             {projects.map((project, index) => (
               <div
                 key={project.id}
-                className={`group transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] will-change-transform ${
-                  expandedCard === project.id 
-                    ? 'md:col-span-2 lg:col-span-3 scale-[1.01] z-20' 
-                    : 'hover:scale-[1.03] hover:-translate-y-2'
-                }`}
+                className="group transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] will-change-transform hover:scale-[1.03] hover:-translate-y-2"
                 style={{ 
                   animationDelay: `${index * 100}ms`,
-                  transform: expandedCard === project.id ? 'translateZ(0)' : undefined
                 }}
               >
                 <Card
@@ -248,16 +182,11 @@ const ProjectShowcase = () => {
                     focus-within:border-primary/80 focus-within:ring-2 focus-within:ring-primary/20
                     transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]
                     backdrop-blur-sm
-                    ${expandedCard === project.id ? 'h-auto border-primary/60' : ''}
                     ${focusedCard === project.id ? 'ring-2 ring-primary/30' : ''}
                   `}
                   style={{ 
-                    background: expandedCard === project.id 
-                      ? 'linear-gradient(135deg, hsl(var(--card)), hsl(var(--accent)/0.3))'
-                      : 'linear-gradient(135deg, hsl(var(--card)), hsl(var(--card)/0.95))',
-                    boxShadow: expandedCard === project.id 
-                      ? '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 40px hsl(var(--primary) / 0.15)' 
-                      : '0 10px 30px -10px rgba(0, 0, 0, 0.1), 0 4px 20px hsl(var(--primary) / 0.05)',
+                    background: 'linear-gradient(135deg, hsl(var(--card)), hsl(var(--card)/0.95))',
+                    boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.1), 0 4px 20px hsl(var(--primary) / 0.05)',
                     willChange: 'transform, box-shadow',
                     perspective: '1000px'
                   }}
@@ -283,13 +212,13 @@ const ProjectShowcase = () => {
                         absolute inset-0 p-6 flex flex-col justify-between 
                         transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
                         will-change-transform
-                        ${flippedCards.has(project.id) && !expandedCard 
+                        ${flippedCards.has(project.id) 
                           ? 'opacity-0 pointer-events-none' 
                           : 'opacity-100'
                         }
                       `}
                       style={{ 
-                        transform: flippedCards.has(project.id) && !expandedCard ? 'rotateY(-180deg)' : 'rotateY(0deg)',
+                        transform: flippedCards.has(project.id) ? 'rotateY(-180deg)' : 'rotateY(0deg)',
                         backfaceVisibility: 'hidden'
                       }}
                     >
@@ -330,7 +259,7 @@ const ProjectShowcase = () => {
                               <div className="w-6 h-6 bg-primary rounded-full animate-pulse group-hover:animate-none group-hover:scale-110 transition-transform duration-300"></div>
                             </div>
                             <p className="text-sm text-muted-foreground font-medium">
-                              {expandedCard ? 'Click to see demo' : 'Hover to see results'}
+                              Hover to see results
                             </p>
                           </div>
                         </div>
@@ -345,13 +274,13 @@ const ProjectShowcase = () => {
                         border-2 border-primary/20 
                         transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
                         will-change-transform
-                        ${flippedCards.has(project.id) && !expandedCard 
+                        ${flippedCards.has(project.id) 
                           ? 'opacity-100' 
                           : 'opacity-0 pointer-events-none'
                         }
                       `}
                       style={{ 
-                        transform: flippedCards.has(project.id) && !expandedCard ? 'rotateY(0deg)' : 'rotateY(180deg)',
+                        transform: flippedCards.has(project.id) ? 'rotateY(0deg)' : 'rotateY(180deg)',
                         backfaceVisibility: 'hidden'
                       }}
                     >
@@ -387,110 +316,138 @@ const ProjectShowcase = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* Expanded state */}
-                  {expandedCard === project.id && (
-                    <div className="absolute inset-0 p-4 md:p-8 bg-card/95 backdrop-blur-md animate-fade-in-up shadow-2xl border border-primary/20">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setExpandedCard(null);
-                          setAnimatingProject(null);
-                        }}
-                        className="absolute top-4 md:top-6 right-4 md:right-6 w-10 h-10 rounded-full bg-muted/80 hover:bg-muted backdrop-blur-sm flex items-center justify-center text-foreground text-xl font-bold transition-all duration-200 hover:scale-110 z-20 focus:ring-2 focus:ring-primary/30 touch-manipulation"
-                        aria-label="Close expanded view"
-                      >
-                        ×
-                      </button>
-                      
-                      <div className="grid md:grid-cols-3 gap-6 md:gap-8 h-full">
-                        {/* Left Column - Project Info */}
-                        <div className="md:col-span-1">
-                          <div className="flex items-center space-x-4 mb-6 md:mb-8">
-                            <div className="relative">
-                              <img
-                                src={project.logo}
-                                alt={`${project.client} logo`}
-                                className="w-12 md:w-16 h-12 md:h-16 object-contain drop-shadow-lg"
-                              />
-                              <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl blur-md -z-10"></div>
-                            </div>
-                            <div>
-                              <h3 className="text-xl md:text-2xl font-bold text-foreground">{project.client}</h3>
-                              <h4 className="text-lg md:text-xl font-bold text-primary">{project.title}</h4>
-                              <div className="w-12 h-1 bg-primary mt-2 rounded-full"></div>
-                            </div>
-                          </div>
-                          
-                          <p className="text-muted-foreground mb-6 md:mb-8 text-base md:text-lg leading-relaxed">
-                            {project.description}
-                          </p>
-                          
-                          {/* Video/Solution Demo Container */}
-                          <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden touch-manipulation relative">
-                            {/* Video Container */}
-                            <div className="relative aspect-video bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center min-h-[200px]">
-                              {/* Add animation demo */}
-                              <ProjectDemoAnimation project={project} isAnimating={animatingProject === project.id} />
-                              
-                              <div className="relative z-10 text-center">
-                                <div className="relative mb-4">
-                                  <button 
-                                    className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center shadow-xl backdrop-blur-sm border border-primary/30 hover:bg-primary/30 active:bg-primary/40 transition-all duration-300 cursor-pointer group touch-manipulation"
-                                    aria-label="Play solution demo"
-                                  >
-                                    <div className="w-0 h-0 border-l-[12px] border-l-primary border-y-[8px] border-y-transparent ml-1 group-hover:scale-110 group-active:scale-95 transition-transform duration-200"></div>
-                                  </button>
-                                  <div className="absolute inset-0 bg-primary/10 rounded-full animate-ping opacity-75"></div>
-                                </div>
-                                <h6 className="text-lg font-bold text-primary mb-2">Solution Demo</h6>
-                                <p className="text-sm text-muted-foreground">Tap to play interactive walkthrough</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Right Columns - Impact Metrics */}
-                        <div className="md:col-span-2">
-                          <h5 className="text-2xl md:text-3xl font-bold text-foreground mb-6 md:mb-8 text-center">
-                            Measurable Impact
-                          </h5>
-                          <div className="grid gap-4 md:gap-6">
-                            {project.metrics.map((metric, idx) => (
-                              <div 
-                                key={idx} 
-                                className="group p-4 md:p-6 rounded-xl bg-gradient-to-r from-accent/20 to-accent/10 border-2 border-accent/30 hover:border-primary/40 active:border-primary/50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[1.01] touch-manipulation"
-                                style={{ animationDelay: `${idx * 100}ms` }}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <div>
-                                    <div className="text-4xl md:text-5xl font-extrabold text-primary mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-primary to-primary/80 bg-clip-text">
-                                      {metric.value}
-                                    </div>
-                                    <div className="text-lg md:text-xl font-bold text-foreground mb-1 md:mb-2 uppercase tracking-wider">
-                                      {metric.title}
-                                    </div>
-                                    <div className="text-muted-foreground text-base md:text-lg leading-relaxed">
-                                      {metric.description}
-                                    </div>
-                                  </div>
-                                  <div className="w-12 h-12 md:w-16 md:h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300 flex-shrink-0">
-                                    <div className="w-6 h-6 md:w-8 md:h-8 bg-primary rounded-full group-hover:scale-110 transition-transform duration-300"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </Card>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Expanded Modal */}
+      <Dialog open={!!expandedCard} onOpenChange={handleCloseExpanded}>
+        <DialogContent className="max-w-6xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-md border border-primary/20">
+          {expandedCard && (() => {
+            const project = projects.find(p => p.id === expandedCard);
+            if (!project) return null;
+
+            return (
+              <div className="h-full p-6 md:p-8">
+                <div className="grid md:grid-cols-2 gap-8 h-full">
+                  {/* Left Column - Project Info */}
+                  <div className="flex flex-col">
+                    <div className="flex items-center space-x-4 mb-6">
+                      <div className="relative">
+                        <img
+                          src={project.logo}
+                          alt={`${project.client} logo`}
+                          className="w-16 h-16 object-contain drop-shadow-lg"
+                        />
+                        <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl blur-md -z-10"></div>
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-bold text-foreground">{project.client}</h3>
+                        <h4 className="text-xl font-bold text-primary">{project.title}</h4>
+                        <div className="w-12 h-1 bg-primary mt-2 rounded-full"></div>
+                      </div>
+                    </div>
+                    
+                    <p className="text-muted-foreground mb-8 text-lg leading-relaxed flex-1">
+                      {project.description}
+                    </p>
+                    
+                    {/* Impact Metrics */}
+                    <div className="space-y-4">
+                      <h5 className="text-xl font-bold text-foreground mb-4">
+                        Key Results
+                      </h5>
+                      {project.metrics.map((metric, idx) => (
+                        <div 
+                          key={idx} 
+                          className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-accent/20 to-accent/10 border border-accent/30"
+                        >
+                          <div>
+                            <div className="text-2xl font-extrabold text-primary mb-1">
+                              {metric.value}
+                            </div>
+                            <div className="text-sm font-bold text-foreground uppercase tracking-wider">
+                              {metric.title}
+                            </div>
+                          </div>
+                          <div className="text-xs text-muted-foreground text-right max-w-[120px]">
+                            {metric.description}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Right Column - Video Demo */}
+                  <div className="flex flex-col">
+                    <h5 className="text-2xl font-bold text-foreground mb-6 text-center">
+                      Solution Demo
+                    </h5>
+                    
+                    {/* Video Container */}
+                    <div className="flex-1 bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden relative">
+                      <div className="relative aspect-video h-full bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center">
+                        {/* Background Image */}
+                        <img
+                          src={project.videoFull}
+                          alt={`${project.client} solution demo`}
+                          className="absolute inset-0 w-full h-full object-cover opacity-60"
+                        />
+                        
+                        {/* Animated Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 animate-pulse"></div>
+                        
+                        {/* Play Button */}
+                        <div className="relative z-10 text-center">
+                          <button 
+                            className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-primary/40 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 group mb-4"
+                            aria-label="Play solution demo"
+                          >
+                            <div className="w-0 h-0 border-l-[16px] border-l-white border-y-[12px] border-y-transparent ml-1 group-hover:scale-110 group-active:scale-95 transition-transform duration-200"></div>
+                          </button>
+                          <h6 className="text-lg font-bold text-primary mb-2">Interactive Walkthrough</h6>
+                          <p className="text-sm text-muted-foreground">Click to see our solution in action</p>
+                        </div>
+                        
+                        {/* Animated Elements */}
+                        <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full animate-ping"></div>
+                        <div className="absolute bottom-4 left-4 w-2 h-2 bg-primary/60 rounded-full animate-bounce"></div>
+                        
+                        {/* Data Flow Animation */}
+                        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                          {[...Array(3)].map((_, i) => (
+                            <div
+                              key={i}
+                              className="absolute w-1 h-8 bg-gradient-to-b from-primary/40 to-transparent rounded-full"
+                              style={{
+                                left: `${20 + i * 30}%`,
+                                top: '10%',
+                                animation: `slide-in-right ${3 + i}s ease-in-out infinite`,
+                                animationDelay: `${i * 0.5}s`
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Demo Description */}
+                    <div className="mt-6 p-4 bg-accent/10 rounded-lg border border-accent/20">
+                      <p className="text-sm text-muted-foreground text-center">
+                        This interactive demo showcases how our {project.title.toLowerCase()} solution 
+                        delivered measurable results for {project.client}.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
