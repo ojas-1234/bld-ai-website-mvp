@@ -1,76 +1,124 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const ClientLogos = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const element = document.getElementById('client-logos');
+    if (element) {
+      observer.observe(element);
+    }
+
+    return () => {
+      if (element) {
+        observer.unobserve(element);
+      }
+    };
+  }, []);
+
   const clients = [
-    { name: 'AWS', logo: 'https://logo.clearbit.com/aws.amazon.com' },
-    { name: 'Microsoft Azure', logo: 'https://logo.clearbit.com/azure.microsoft.com' },
-    { name: 'DataRobot', logo: 'https://logo.clearbit.com/datarobot.com' },
-    { name: 'Samsara', logo: 'https://logo.clearbit.com/samsara.com' },
-    { name: 'Median', logo: 'https://logo.clearbit.com/median.co' },
+    {
+      name: 'AWS',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
+      width: 'w-24',
+      height: 'h-12'
+    },
+    {
+      name: 'Microsoft',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg',
+      width: 'w-32',
+      height: 'h-8'
+    },
+    {
+      name: 'Google',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+      width: 'w-28',
+      height: 'h-10'
+    },
+    {
+      name: 'Meta',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg',
+      width: 'w-24',
+      height: 'h-10'
+    },
+    {
+      name: 'Apple',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+      width: 'w-10',
+      height: 'h-12'
+    },
+    {
+      name: 'Tesla',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Tesla_T_symbol.svg',
+      width: 'w-12',
+      height: 'h-12'
+    },
+    {
+      name: 'Median',
+      logo: '/lovable-uploads/caeb6fb1-66ab-44e1-9d18-1934f3716424.png',
+      width: 'w-28',
+      height: 'h-12'
+    },
+    {
+      name: 'Stripe',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg',
+      width: 'w-24',
+      height: 'h-10'
+    }
   ];
 
+  const duplicatedClients = [...clients, ...clients];
+
   return (
-    <section className="py-16 bg-gradient-to-r from-accent/20 to-accent/10 overflow-hidden">
-      <div className="container mx-auto px-4 text-center">
-        <h2 className="text-2xl font-bold text-foreground mb-12">
-          We've worked with the best
-        </h2>
+    <section 
+      id="client-logos" 
+      className={`py-16 bg-background border-t border-border/20 transition-all duration-1000 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-foreground mb-4">
+            Trusted by Industry Leaders
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            We've partnered with leading companies to deliver cutting-edge AI solutions
+          </p>
+        </div>
         
-        <div className="relative">
-          {/* Gradient overlays for smooth edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10"></div>
-          
-          {/* Scrolling logos container */}
-          <div className="flex animate-scroll-left">
-            {/* First set of logos */}
-            <div className="flex space-x-16 min-w-max">
-              {clients.map((client, index) => (
-                <div
-                  key={`first-${index}`}
-                  className="flex items-center justify-center h-16 w-32 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
-                >
-                  <img
-                    src={client.logo}
-                    alt={client.name}
-                    className="max-h-12 max-w-full object-contain"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        parent.innerHTML = `<div class="text-muted-foreground font-medium">${client.name}</div>`;
-                      }
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            
-            {/* Duplicate set for seamless loop */}
-            <div className="flex space-x-16 min-w-max">
-              {clients.map((client, index) => (
-                <div
-                  key={`second-${index}`}
-                  className="flex items-center justify-center h-16 w-32 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
-                >
-                  <img
-                    src={client.logo}
-                    alt={client.name}
-                    className="max-h-12 max-w-full object-contain"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        parent.innerHTML = `<div class="text-muted-foreground font-medium">${client.name}</div>`;
-                      }
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
+        <div className="relative overflow-hidden">
+          <div 
+            className="flex animate-scroll-left"
+            style={{
+              width: `${duplicatedClients.length * 200}px`,
+            }}
+          >
+            {duplicatedClients.map((client, index) => (
+              <div
+                key={`${client.name}-${index}`}
+                className="flex-shrink-0 w-48 h-24 flex items-center justify-center mx-4 opacity-70 hover:opacity-100 transition-opacity duration-300"
+              >
+                <img
+                  src={client.logo}
+                  alt={`${client.name} logo`}
+                  className={`${client.width} ${client.height} object-contain filter grayscale hover:grayscale-0 transition-all duration-300`}
+                />
+              </div>
+            ))}
           </div>
+          
+          {/* Gradient fade effects */}
+          <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-background to-transparent pointer-events-none z-10"></div>
+          <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-background to-transparent pointer-events-none z-10"></div>
         </div>
       </div>
     </section>
